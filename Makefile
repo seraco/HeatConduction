@@ -12,6 +12,7 @@ TEST_LIB_DIR = test/lib
 SRC = $(wildcard $(SRC_DIR)/*.cpp)
 TEST_SRC = $(wildcard $(TEST_SRC_DIR)/*.cpp)
 OBJ = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC))
+OBJ_WITHOUT_MAIN = $(filter-out $(OBJ_DIR)/main.o, $(OBJ))
 TEST_OBJ = $(patsubst $(TEST_SRC_DIR)/%.cpp,$(TEST_OBJ_DIR)/%.o,$(TEST_SRC))
 BIN = $(wildcard $(BIN_DIR)/*.out)
 TEST_BIN = $(wildcard $(TEST_BIN_DIR)/*.out)
@@ -33,7 +34,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 test: $(TEST_EXE)
 
-$(TEST_EXE): $(TEST_OBJ) $(OBJ)
+$(TEST_EXE): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
 	$(CXX) $^ -o $(TEST_BIN_DIR)/$@.out $(TEST_LIB)
 
 $(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp

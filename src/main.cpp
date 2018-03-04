@@ -1,10 +1,9 @@
 #include <iostream>
-using namespace std;
 
-// #include "../include/matrix.h"
+#include "../include/matrix.h"
 
-int HeatConduction(int argc, char const *argv[]) {
-    cout << "Hello world!" << endl;
-    // matrix();
+int main(int argc, char const *argv[]) {
+    CMatrix<int> A(4, 4, 2);
+    std::cout << A(3, 3) << std::endl;
     return 0;
 }
