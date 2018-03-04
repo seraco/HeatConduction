@@ -91,6 +91,8 @@ namespace {
         unsigned size = 4;
         CMatrix<int> matInt = CMatrix<int>(size, size, 0);
         CMatrix<double> matDbl = CMatrix<double>(size, size, 0.0);
+        const CMatrix<int> ConstMatInt = CMatrix<int>(size, size, 0);
+        const CMatrix<double> ConstMatDbl = CMatrix<double>(size, size, 0.0);
         for(unsigned i = 0; i < size; i++) {
             for(unsigned j = 0; j < size; j++) {
                 matInt(i, j) = i * j;
@@ -111,7 +113,17 @@ namespace {
                 EXPECT_EQ(i * j, matDbl(i, j));
             }
         }
+        // ConstMatInt(0, 0) = 2;
+        std::cout << ConstMatInt(0, 0) << std::endl;
     }
+
+    // TEST_F(CMatrixTest, ConstAccessOperator) {
+    //     unsigned size = 4;
+    //     const CMatrix<int> ConstMatInt = CMatrix<int>(size, size, 0);
+    //     const CMatrix<double> ConstMatDbl = CMatrix<double>(size, size, 0.0);
+    //     ConstMatInt(0, 0) = 2;
+    //     std::cout << ConstMatInt(0, 0) << std::endl;
+    // }
 
 }
 

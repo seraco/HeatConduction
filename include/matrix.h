@@ -48,7 +48,7 @@ template <typename T> class CMatrix {
             // std::cout << "Row: " << i << " Col: " << j << ": " << &mtx[i][j] << std::endl;
             return mtx[i][j];
         }
-        // const T operator()(const unsigned i, const unsigned j) const {
+        // const T& operator()(const unsigned i, const unsigned j) const {
         //     return mtx[i][j];
         // }
 };
