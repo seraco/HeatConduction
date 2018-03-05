@@ -11,46 +11,40 @@ template <typename T> class CMatrix {
         std::vector< std::vector<T> > mtx;
 
     public:
-        CMatrix() {
-            nRows = 0;
-            nCols = 0;
-        }
-        CMatrix(unsigned rows, unsigned cols, const T& initValue) {
-            nRows = rows;
-            nCols = cols;
-            mtx.resize(nRows);
-            for(unsigned i = 0; i < nRows; i++) {
-                mtx[i].resize(nCols, initValue);
-            }
-        }
-        CMatrix(const CMatrix<T>& rhs) {
-            nRows = rhs.nRows;
-            nCols = rhs.nCols;
-            mtx = rhs.mtx;
-        }
-        virtual ~CMatrix() {}
+        CMatrix();
+        CMatrix(unsigned rows, unsigned cols, const T& initValue);
+        // TODO: Not needed¿?
+        // CMatrix(const CMatrix<T>& rhs);
+        virtual ~CMatrix();
 
-        unsigned getRows() {
-            return nRows;
-        }
-        unsigned getCols() {
-            return nCols;
-        }
-        unsigned isErrWithMtxSize() {
-            return (mtx.size()!=nRows && mtx[0].size()!=nCols);
-        }
-        T getEntry(unsigned i, unsigned j) {
-            return mtx[i][j];
-        }
+        unsigned getRows() const;
+        unsigned getCols() const;
+        unsigned isErrWithMtxSize();
+        void printMtx();
+
         // Adress operator after type T is to be able to assign values when
         // there is an assignment like A(i, j) = 3
-        T& operator()(const unsigned i, const unsigned j) {
-            // std::cout << "Row: " << i << " Col: " << j << ": " << &mtx[i][j] << std::endl;
-            return mtx[i][j];
-        }
-        // const T& operator()(const unsigned i, const unsigned j) const {
-        //     return mtx[i][j];
-        // }
+        T& operator()(const unsigned i, const unsigned j);
+        const T& operator()(const unsigned i, const unsigned j) const;
+        // TODO: Not needed¿?
+        // CMatrix<T>& operator=(CMatrix<T>& rhs);
+        // TODO: Throw error if matrices are of different size!
+        CMatrix<T> operator+(const CMatrix<T>& rhs);
+        // TODO: Throw error if matrices are of different size!
+        CMatrix<T>& operator+=(const CMatrix<T>& rhs);
+        // TODO: Throw error if matrices are of different size!
+        CMatrix<T> operator-(const CMatrix<T>& rhs);
+        // TODO: Throw error if matrices are of different size!
+        CMatrix<T>& operator-=(const CMatrix<T>& rhs);
+        // TODO: Throw error if matrices are of incorrect size!
+        CMatrix<T> operator*(const CMatrix<T>& rhs);
+        CMatrix<T>& operator*=(const CMatrix& rhs);
+        CMatrix<T> operator+(const T& rhs);
+        CMatrix<T> operator-(const T& rhs);
+        CMatrix<T> operator*(const T& rhs);
+        CMatrix<T> operator/(const T& rhs);
 };
+
+#include "../src/matrix.cpp"
 
 #endif
