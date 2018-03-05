@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../include/matrix.h"
+#include "../include/CMatrix.h"
 
 int main(int argc, char const *argv[]) {
     CMatrix<int> A(4, 4, 2);

@@ -45,6 +45,6 @@ template <typename T> class CMatrix {
         CMatrix<T> operator/(const T& rhs);
 };
 
-#include "../src/matrix.cpp"
+#include "../src/CMatrix.cpp"
 
 #endif

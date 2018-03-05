@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include <../include/matrix.h>
+#include <../include/CMatrix.h>
 
 template<typename T>
 CMatrix<T>::CMatrix() {
