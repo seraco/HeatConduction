@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include <../include/CMatrix.h>
+#include "../include/CMatrix.h"
 
 template<typename T>
 CMatrix<T>::CMatrix() {
@@ -45,6 +45,41 @@ unsigned CMatrix<T>::getCols() const {
 template<typename T>
 unsigned CMatrix<T>::isErrWithMtxSize() {
     return (mtx.size()!=nRows && mtx[0].size()!=nCols);
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::transpose() {
+    CMatrix<T> res(nRows, nCols, 0.0);
+
+    for (unsigned i = 0; i < nRows; i++) {
+        for (unsigned j = 0; j < nCols; j++) {
+            res(i, j) = mtx[j][i];
+        }
+    }
+
+    return res;
+}
+
+template<typename T>
+bool CMatrix<T>::isLowerTriangular() {
+    for (unsigned i = 0; i < nRows; i++) {
+        for (unsigned j = i+1; j < nCols; j++) {
+            if(mtx[i][j] != 0.0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+template<typename T>
+bool CMatrix<T>::isUpperTriangular() {
+    for (unsigned i = 1; i < nRows; i++) {
+        for (unsigned j = 0; j < i; j++) {
+            if(mtx[i][j] != 0.0) return false;
+        }
+    }
+    return true;
 }
 
 template<typename T>

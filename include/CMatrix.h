@@ -21,6 +21,9 @@ template <typename T> class CMatrix {
         unsigned getCols() const;
         unsigned isErrWithMtxSize();
         void printMtx();
+        CMatrix<T> transpose();
+        bool isLowerTriangular();
+        bool isUpperTriangular();
 
         // Adress operator after type T is to be able to assign values when
         // there is an assignment like A(i, j) = 3

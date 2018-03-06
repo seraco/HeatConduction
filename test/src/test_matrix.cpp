@@ -118,6 +118,72 @@ namespace {
         // std::cout << "Row: " << 2 << " Col: " << 2 << ": " << (*Aint)(2, 2) << std::endl;
     }
 
+    TEST_F(CMatrixTest, Transpose) {
+        unsigned size = 4;
+        CMatrix<int> matInt(size, size, 0);
+        CMatrix<double> matDbl(size, size, 0.0);
+        CMatrix<int> matIntTranspose(size, size, 0);
+        CMatrix<double> matDblTranspose(size, size, 0.0);
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = 0; j < size; j++) {
+                matInt(i, j) = i - j;
+            }
+        }
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = 0; j < size; j++) {
+                matDbl(i, j) = double(i - j);
+            }
+        }
+        matIntTranspose = matInt.transpose();
+        matDblTranspose = matDbl.transpose();
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = 0; j < size; j++) {
+                matIntTranspose(i, j) = j - i;
+            }
+        }
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = 0; j < size; j++) {
+                matDblTranspose(i, j) = double(j - i);
+            }
+        }
+    }
+
+    TEST_F(CMatrixTest, UpperTriangular) {
+        unsigned size = 4;
+        CMatrix<int> matInt(size, size, 0);
+        CMatrix<double> matDbl(size, size, 0.0);
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = i; j < size; j++) {
+                matInt(i, j) = i + j;
+            }
+        }
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = i; j < size; j++) {
+                matDbl(i, j) = double(i + j);
+            }
+        }
+        EXPECT_TRUE(matInt.isUpperTriangular());
+        EXPECT_TRUE(matDbl.isUpperTriangular());
+    }
+
+    TEST_F(CMatrixTest, LowerTriangular) {
+        unsigned size = 4;
+        CMatrix<int> matInt(size, size, 0);
+        CMatrix<double> matDbl(size, size, 0.0);
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = 0; j <= i; j++) {
+                matInt(i, j) = i + j;
+            }
+        }
+        for (unsigned i = 0; i < size; i++) {
+            for (unsigned j = 0; j <= i; j++) {
+                matDbl(i, j) = double(i + j);
+            }
+        }
+        EXPECT_TRUE(matInt.isLowerTriangular());
+        EXPECT_TRUE(matDbl.isLowerTriangular());
+    }
+
     TEST_F(CMatrixTest, AccessOperator) {
         unsigned size = 4;
         CMatrix<int> matInt = CMatrix<int>(size, size, 0);
@@ -240,7 +306,7 @@ namespace {
             }
         }
         for(unsigned i = 0; i < vecInt.getRows(); i++) {
-            EXPECT_EQ((*Fint)(i, 1), vecInt(i, 1));
+            EXPECT_EQ((*Fint)(i, 0), vecInt(i, 0));
         }
         for(unsigned i = 0; i < matDbl.getRows(); i++) {
             for(unsigned j = 0; j < matDbl.getCols(); j++) {
@@ -249,7 +315,7 @@ namespace {
             }
         }
         for(unsigned i = 0; i < vecDbl.getRows(); i++) {
-            EXPECT_EQ((*Fdbl)(i, 1), vecDbl(i, 1));
+            EXPECT_EQ((*Fdbl)(i, 0), vecDbl(i, 0));
         }
     }
 
