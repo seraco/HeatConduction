@@ -3,11 +3,11 @@
 #include "../include/CMatrix.h"
 
 int main(int argc, char const *argv[]) {
-    CMatrix<int> A(4, 4, 2);
-    CMatrix<int> B = CMatrix<int>(A);
-    CMatrix<int> C;
-    CMatrix<int> D;
-    CMatrix<int> E(4, 1, 2);
+    CMatrix A(4, 4, 2);
+    CMatrix B = CMatrix(A);
+    CMatrix C;
+    CMatrix D;
+    CMatrix E(4, 1, 2);
     A += B;
     B -= A;
     C = A + B;

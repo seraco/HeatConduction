@@ -16,6 +16,7 @@ OBJ_WITHOUT_MAIN = $(filter-out $(OBJ_DIR)/main.o, $(OBJ))
 TEST_OBJ = $(patsubst $(TEST_SRC_DIR)/%.cpp,$(TEST_OBJ_DIR)/%.o,$(TEST_SRC))
 BIN = $(wildcard $(BIN_DIR)/*.out)
 TEST_BIN = $(wildcard $(TEST_BIN_DIR)/*.out)
+LIB = -llapack -lblas
 TEST_LIB = $(wildcard $(TEST_LIB_DIR)/*.a)
 
 CXX = g++
@@ -27,7 +28,7 @@ TEST_INC = -Itest/include
 all: $(EXE)
 
 $(EXE): $(OBJ)
-	$(CXX) $^ -o $(BIN_DIR)/$@.out
+	$(CXX) $^ -o $(BIN_DIR)/$@.out $(LIB)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INC) -c $< -o $@
@@ -35,7 +36,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 test: $(TEST_EXE)
 
 $(TEST_EXE): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
-	$(CXX) $^ -o $(TEST_BIN_DIR)/$@.out $(TEST_LIB)
+	$(CXX) $^ -o $(TEST_BIN_DIR)/$@.out $(TEST_LIB) $(LIB)
 
 $(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(TEST_CXXFLAGS) $(TEST_INC) $(INC) -c $< -o $@
