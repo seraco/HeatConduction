@@ -34,7 +34,7 @@ CMatrix::CMatrix(const CMatrix& rhs) {
 }
 
 CMatrix::~CMatrix() {
-    delete mtx;
+    delete[] mtx;
 }
 
 unsigned CMatrix::getRows() const {
