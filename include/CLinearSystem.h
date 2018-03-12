@@ -1,6 +1,8 @@
 #ifndef __CLINEARSYSTEM_H
 #define __CLINEARSYSTEM_H
 
+#include "CMatrix.h"
+
 #define F77NAME(x) x##_
 extern "C" {
     void F77NAME(dgesv)(const int& n, const int& nrhs, const double* A,
