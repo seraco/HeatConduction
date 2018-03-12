@@ -1,8 +1,6 @@
 #ifndef __CMATRIX_CPP
 #define __CMATRIX_CPP
 
-#include <iostream>
-
 #include "../include/CMatrix.h"
 #include "../include/CMaterial.h"
 
