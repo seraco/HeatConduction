@@ -51,12 +51,24 @@ unsigned CMatrix::getCols() const {
 // }
 
 CMatrix CMatrix::transpose() {
-    CMatrix res(nRows, nCols, 0.0);
+    CMatrix res(nCols, nRows, 0.0);
 
     for (unsigned j = 0; j < nCols; j++) {
         for (unsigned i = 0; i < nRows; i++) {
             res(i, j) = mtx[i*nRows+j];
         }
+    }
+
+    return res;
+}
+
+CMatrix CMatrix::linspace(const double left, const double right,
+                                 const unsigned nNode) {
+    CMatrix res = CMatrix(1, nNode, 0.0);
+    double deltaX = (right - left) / (nNode - 1);
+
+    for (unsigned i = 0; i < nNode; i++) {
+        res(i, 0) = left + i*deltaX;
     }
 
     return res;

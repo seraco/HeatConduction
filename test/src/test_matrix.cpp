@@ -220,4 +220,15 @@ namespace {
         }
     }
 
+    TEST_F(CMatrixTest, Linspace) {
+        CMatrix lin;
+        const double left = 0.0;
+        const double right = 3.0;
+        const unsigned nNode = 4.0;
+        lin = CMatrix::linspace(left, right, nNode);
+        EXPECT_EQ(0.0, lin(0, 0));
+        EXPECT_EQ(1.0, lin(1, 0));
+        EXPECT_EQ(2.0, lin(2, 0));
+        EXPECT_EQ(3.0, lin(3, 0));
+    }
 }

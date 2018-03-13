@@ -21,6 +21,8 @@ class CMatrix {
         // bool isLowerTriangular();
         // bool isUpperTriangular();
         double* getMtxAddress();
+        static CMatrix linspace(const double left, const double right,
+                                const unsigned nNode);
 
         // Adress operator after type T is to be able to assign values when
         // there is an assignment like A(i, j) = 3
