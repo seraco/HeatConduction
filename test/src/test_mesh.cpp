@@ -37,20 +37,71 @@ namespace {
     }
 
     TEST_F(CMeshTest, CoordinateMatrix) {
-        CGeometry geo = CGeometry(0.0, 1.0, 1.0, 2.0, 0.2);
+        CGeometry geoFirst = CGeometry(0.0, 1.0, 1.0, 2.0, 0.2);
+        CMesh mshFirst = CMesh(2, 1, geoFirst);
+        CMatrix coorFirst = mshFirst.coordinateMtx();
+        EXPECT_EQ(0.0, coorFirst(0, 0));
+        EXPECT_EQ(-.5, coorFirst(0, 1));
+        EXPECT_EQ(0.0, coorFirst(1, 0));
+        EXPECT_EQ(0.5, coorFirst(1, 1));
+        EXPECT_EQ(1.0, coorFirst(2, 0));
+        EXPECT_EQ(-.5, coorFirst(2, 1));
+        EXPECT_EQ(1.0, coorFirst(3, 0));
+        EXPECT_EQ(0.5, coorFirst(3, 1));
+        EXPECT_EQ(2.0, coorFirst(4, 0));
+        EXPECT_EQ(-.5, coorFirst(4, 1));
+        EXPECT_EQ(2.0, coorFirst(5, 0));
+        EXPECT_EQ(0.5, coorFirst(5, 1));
+        CGeometry geoSecond = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
+        CMesh mshSecond = CMesh(2, 1, geoSecond);
+        CMatrix coorSecond = mshSecond.coordinateMtx();
+        EXPECT_NEAR(0.0, coorSecond(0, 0), 0.0001);
+        EXPECT_NEAR(-.5, coorSecond(0, 1), 0.0001);
+        EXPECT_NEAR(0.0, coorSecond(1, 0), 0.0001);
+        EXPECT_NEAR(0.5, coorSecond(1, 1), 0.0001);
+        EXPECT_NEAR(1.5, coorSecond(2, 0), 0.0001);
+        EXPECT_NEAR(-.2937, coorSecond(2, 1), 0.0001);
+        EXPECT_NEAR(1.5, coorSecond(3, 0), 0.0001);
+        EXPECT_NEAR(0.2937, coorSecond(3, 1), 0.0001);
+        EXPECT_NEAR(3.0, coorSecond(4, 0), 0.0001);
+        EXPECT_NEAR(-.65, coorSecond(4, 1), 0.0001);
+        EXPECT_NEAR(3.0, coorSecond(5, 0), 0.0001);
+        EXPECT_NEAR(0.65, coorSecond(5, 1), 0.0001);
+    }
+
+    TEST_F(CMeshTest, TopologyMatrix) {
+        CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
         CMesh msh = CMesh(2, 1, geo);
-        CMatrix coor = msh.coordinateMtx();
-        EXPECT_EQ(0.0, coor(0, 0));
-        EXPECT_EQ(-.5, coor(0, 1));
-        EXPECT_EQ(0.0, coor(1, 0));
-        EXPECT_EQ(0.5, coor(1, 1));
-        EXPECT_EQ(1.0, coor(2, 0));
-        EXPECT_EQ(-.5, coor(2, 1));
-        EXPECT_EQ(1.0, coor(3, 0));
-        EXPECT_EQ(0.5, coor(3, 1));
-        EXPECT_EQ(2.0, coor(4, 0));
-        EXPECT_EQ(-.5, coor(4, 1));
-        EXPECT_EQ(2.0, coor(5, 0));
-        EXPECT_EQ(0.5, coor(5, 1));
+        CMatrix topol = msh.topologyMtx();
+        // CMatrix topolFromProperty = msh.getTopolMtx();
+        EXPECT_EQ(0, topol(0, 0));
+        EXPECT_EQ(1, topol(1, 0));
+        EXPECT_EQ(2, topol(0, 1));
+        EXPECT_EQ(3, topol(1, 1));
+        EXPECT_EQ(4, topol(0, 2));
+        EXPECT_EQ(5, topol(1, 2));
+        // EXPECT_EQ(0, topolFromProperty(0, 0));
+        // EXPECT_EQ(1, topolFromProperty(1, 0));
+        // EXPECT_EQ(2, topolFromProperty(0, 1));
+        // EXPECT_EQ(3, topolFromProperty(1, 1));
+        // EXPECT_EQ(4, topolFromProperty(0, 2));
+        // EXPECT_EQ(5, topolFromProperty(1, 2));
+    }
+
+    TEST_F(CMeshTest, ConnectivityMatrix) {
+        CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
+        CMesh msh = CMesh(2, 1, geo);
+        CMatrix topol = msh.topologyMtx();
+        CMatrix conn = msh.connectivityMtx(topol);
+        EXPECT_EQ(0, conn(0, 0));
+        EXPECT_EQ(0, conn(0, 1));
+        EXPECT_EQ(2, conn(0, 2));
+        EXPECT_EQ(3, conn(0, 3));
+        EXPECT_EQ(1, conn(0, 4));
+        EXPECT_EQ(1, conn(1, 0));
+        EXPECT_EQ(2, conn(1, 1));
+        EXPECT_EQ(4, conn(1, 2));
+        EXPECT_EQ(5, conn(1, 3));
+        EXPECT_EQ(3, conn(1, 4));
     }
 }

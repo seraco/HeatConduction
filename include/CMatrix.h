@@ -44,6 +44,7 @@ class CMatrix {
         CMatrix operator-(const double& rhs);
         CMatrix operator*(const double& rhs);
         CMatrix operator/(const double& rhs);
+        CMatrix operator^(const double& rhs);
 };
 
 #endif

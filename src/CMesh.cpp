@@ -59,6 +59,10 @@ CGeometry CMesh::getGeometry() {
     return geometry;
 }
 
+// CMatrix CMesh::getTopolMtx() {
+//     return topolMtx;
+// }
+
 CMatrix CMesh::coordinateMtx() {
     CMatrix xVec, hVec, yMat, yLocVec, coorMat;
     double a = geometry.getAConst();
@@ -67,7 +71,7 @@ CMatrix CMesh::coordinateMtx() {
     unsigned nod;
 
     xVec = CMatrix::linspace(0.0, geometry.getLength(), nXDirElem + 1);
-    hVec = xVec*xVec*a + xVec*b + hLeft;
+    hVec = (xVec^2)*a + xVec*b + hLeft;
 
     yMat = CMatrix(nYDirElem + 1, nXDirElem + 1, 0.0);
     for (unsigned j = 0; j < nXDirElem + 1; j++) {
@@ -92,5 +96,38 @@ CMatrix CMesh::coordinateMtx() {
     return coorMat;
 }
 
+CMatrix CMesh::topologyMtx() {
+    CMatrix topol = CMatrix(nYDirElem + 1, nXDirElem + 1, 0.0);
+
+    unsigned nod = 0;
+    for (unsigned j = 0; j < nXDirElem + 1; j++) {
+        for (unsigned i = 0; i < nYDirElem + 1; i++) {
+            topol(i, j) = nod;
+            nod++;
+        }
+    }
+
+    // topolMtx = topol;
+
+    return topol;
+}
+
+CMatrix CMesh::connectivityMtx(CMatrix topol) {
+    CMatrix conn = CMatrix(nElem, nNodePerElem + 1, 0.0);
+
+    unsigned elem = 0;
+    for (unsigned j = 0; j < nXDirElem; j++) {
+        for (unsigned i = 0; i < nYDirElem; i++) {
+            conn(elem, 0) = elem;
+            conn(elem, 1) = topol(i, j);
+            conn(elem, 2) = topol(i, j + 1);
+            conn(elem, 3) = topol(i + 1, j + 1);
+            conn(elem, 4) = topol(i + 1, j);
+            elem++;
+        }
+    }
+
+    return conn;
+}
 
 #endif

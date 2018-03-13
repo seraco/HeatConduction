@@ -220,6 +220,17 @@ namespace {
         }
     }
 
+    TEST_F(CMatrixTest, PowerOperator) {
+        CMatrix matForConst;
+        const double constVal = 2.0;
+        matForConst = (*A) ^ constVal;
+        for(unsigned i = 0; i < matForConst.getRows(); i++) {
+            for(unsigned j = 0; j < matForConst.getCols(); j++) {
+                EXPECT_EQ((*D)(i, j), matForConst(i, j));
+            }
+        }
+    }
+
     TEST_F(CMatrixTest, Linspace) {
         CMatrix lin;
         const double left = 0.0;

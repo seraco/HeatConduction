@@ -2,6 +2,7 @@
 #define __CMATRIX_CPP
 
 #include <iostream>
+#include <cmath>
 
 #include "../include/CMatrix.h"
 
@@ -241,6 +242,18 @@ CMatrix CMatrix::operator/(const double& rhs) {
     for (unsigned j = 0; j < nCols; j++) {
         for (unsigned i = 0; i < nRows; i++) {
             res(i, j) = mtx[j*nRows+i] / rhs;
+        }
+    }
+
+    return res;
+}
+
+CMatrix CMatrix::operator^(const double& rhs) {
+    CMatrix res(nRows, nCols, 0.0);
+
+    for (unsigned j = 0; j < nCols; j++) {
+        for (unsigned i = 0; i < nRows; i++) {
+            res(i, j) = pow(mtx[j*nRows+i], rhs);
         }
     }
 
