@@ -14,7 +14,15 @@ class CMesh {
         unsigned dofPerNode;
         unsigned totalDofInElem;
         CGeometry geometry;
-        // CMatrix topolMtx;
+        CMatrix coorMtx;
+        CMatrix topolMtx;
+        CMatrix connMtx;
+        CMatrix glDofMtx;
+
+        CMatrix coordinateMtx();
+        CMatrix topologyMtx();
+        CMatrix connectivityMtx(CMatrix topol);
+        CMatrix globalDofMtx(CMatrix conn);
 
     public:
         CMesh();
@@ -29,11 +37,10 @@ class CMesh {
         unsigned getDofPerNode();
         unsigned getTotalDofInElem();
         CGeometry getGeometry();
-        // CMatrix getTopolMtx();
-
-        CMatrix coordinateMtx();
-        CMatrix topologyMtx();
-        CMatrix connectivityMtx(CMatrix topol);
+        CMatrix getCoorMtx();
+        CMatrix getTopolMtx();
+        CMatrix getConnMtx();
+        CMatrix getGlDofMtx();
 };
 
 #endif

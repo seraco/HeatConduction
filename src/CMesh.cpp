@@ -2,6 +2,7 @@
 #define __CMESH_CPP
 
 #include "../include/CMatrix.h"
+#include "../include/CGeometry.h"
 #include "../include/CMesh.h"
 
 CMesh::CMesh() {
@@ -23,6 +24,11 @@ CMesh::CMesh(const unsigned NElx, const unsigned NEly, const CGeometry geo) {
     dofPerNode = 1;
     totalDofInElem = nNodePerElem * dofPerNode;
     geometry = geo;
+
+    coorMtx = coordinateMtx();
+    topolMtx = topologyMtx();
+    connMtx = connectivityMtx(topolMtx);
+    glDofMtx = globalDofMtx(connMtx);
 }
 
 CMesh::~CMesh() {}
@@ -59,9 +65,21 @@ CGeometry CMesh::getGeometry() {
     return geometry;
 }
 
-// CMatrix CMesh::getTopolMtx() {
-//     return topolMtx;
-// }
+CMatrix CMesh::getCoorMtx() {
+    return coorMtx;
+}
+
+CMatrix CMesh::getTopolMtx() {
+    return topolMtx;
+}
+
+CMatrix CMesh::getConnMtx() {
+    return connMtx;
+}
+
+CMatrix CMesh::getGlDofMtx() {
+    return glDofMtx;
+}
 
 CMatrix CMesh::coordinateMtx() {
     CMatrix xVec, hVec, yMat, yLocVec, coorMat;
@@ -107,8 +125,6 @@ CMatrix CMesh::topologyMtx() {
         }
     }
 
-    // topolMtx = topol;
-
     return topol;
 }
 
@@ -128,6 +144,29 @@ CMatrix CMesh::connectivityMtx(CMatrix topol) {
     }
 
     return conn;
+}
+
+CMatrix CMesh::globalDofMtx(CMatrix conn) {
+    CMatrix glDof = CMatrix(nNode, 2, 0.0);
+    unsigned nod, iDof, elemNDof;
+
+    for (unsigned i = 0; i < nElem; i++) {
+        for (unsigned j = 0; j < nNodePerElem; j++) {
+            nod = conn(i, j + 1);
+            if (glDof(nod, 0) < dofPerNode) glDof(nod, 0) = dofPerNode;
+        }
+    }
+
+    iDof = 0;
+    for (unsigned i = 0; i < nNode; i++) {
+        elemNDof = glDof(i, 0);
+        for (unsigned j = 0; j < elemNDof; j++) {
+            glDof(i, j + 1) = iDof;
+            iDof++;
+        }
+    }
+
+    return glDof;
 }
 
 #endif

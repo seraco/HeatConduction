@@ -39,7 +39,7 @@ namespace {
     TEST_F(CMeshTest, CoordinateMatrix) {
         CGeometry geoFirst = CGeometry(0.0, 1.0, 1.0, 2.0, 0.2);
         CMesh mshFirst = CMesh(2, 1, geoFirst);
-        CMatrix coorFirst = mshFirst.coordinateMtx();
+        CMatrix coorFirst = mshFirst.getCoorMtx();
         EXPECT_EQ(0.0, coorFirst(0, 0));
         EXPECT_EQ(-.5, coorFirst(0, 1));
         EXPECT_EQ(0.0, coorFirst(1, 0));
@@ -54,7 +54,7 @@ namespace {
         EXPECT_EQ(0.5, coorFirst(5, 1));
         CGeometry geoSecond = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
         CMesh mshSecond = CMesh(2, 1, geoSecond);
-        CMatrix coorSecond = mshSecond.coordinateMtx();
+        CMatrix coorSecond = mshSecond.getCoorMtx();
         EXPECT_NEAR(0.0, coorSecond(0, 0), 0.0001);
         EXPECT_NEAR(-.5, coorSecond(0, 1), 0.0001);
         EXPECT_NEAR(0.0, coorSecond(1, 0), 0.0001);
@@ -72,27 +72,19 @@ namespace {
     TEST_F(CMeshTest, TopologyMatrix) {
         CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
         CMesh msh = CMesh(2, 1, geo);
-        CMatrix topol = msh.topologyMtx();
-        // CMatrix topolFromProperty = msh.getTopolMtx();
+        CMatrix topol = msh.getTopolMtx();
         EXPECT_EQ(0, topol(0, 0));
         EXPECT_EQ(1, topol(1, 0));
         EXPECT_EQ(2, topol(0, 1));
         EXPECT_EQ(3, topol(1, 1));
         EXPECT_EQ(4, topol(0, 2));
         EXPECT_EQ(5, topol(1, 2));
-        // EXPECT_EQ(0, topolFromProperty(0, 0));
-        // EXPECT_EQ(1, topolFromProperty(1, 0));
-        // EXPECT_EQ(2, topolFromProperty(0, 1));
-        // EXPECT_EQ(3, topolFromProperty(1, 1));
-        // EXPECT_EQ(4, topolFromProperty(0, 2));
-        // EXPECT_EQ(5, topolFromProperty(1, 2));
     }
 
     TEST_F(CMeshTest, ConnectivityMatrix) {
         CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
         CMesh msh = CMesh(2, 1, geo);
-        CMatrix topol = msh.topologyMtx();
-        CMatrix conn = msh.connectivityMtx(topol);
+        CMatrix conn = msh.getConnMtx();
         EXPECT_EQ(0, conn(0, 0));
         EXPECT_EQ(0, conn(0, 1));
         EXPECT_EQ(2, conn(0, 2));
@@ -103,5 +95,23 @@ namespace {
         EXPECT_EQ(4, conn(1, 2));
         EXPECT_EQ(5, conn(1, 3));
         EXPECT_EQ(3, conn(1, 4));
+    }
+
+    TEST_F(CMeshTest, GlobalDofMatrix) {
+        CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
+        CMesh msh = CMesh(2, 1, geo);
+        CMatrix glDof = msh.getGlDofMtx();
+        EXPECT_EQ(1, glDof(0, 0));
+        EXPECT_EQ(1, glDof(1, 0));
+        EXPECT_EQ(1, glDof(2, 0));
+        EXPECT_EQ(1, glDof(3, 0));
+        EXPECT_EQ(1, glDof(4, 0));
+        EXPECT_EQ(1, glDof(5, 0));
+        EXPECT_EQ(0, glDof(0, 1));
+        EXPECT_EQ(1, glDof(1, 1));
+        EXPECT_EQ(2, glDof(2, 1));
+        EXPECT_EQ(3, glDof(3, 1));
+        EXPECT_EQ(4, glDof(4, 1));
+        EXPECT_EQ(5, glDof(5, 1));
     }
 }
