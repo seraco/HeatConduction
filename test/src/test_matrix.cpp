@@ -249,13 +249,13 @@ namespace {
         mat(0, 1) = 2.0;
         mat(1, 0) = 3.0;
         mat(1, 1) = 4.0;
-        EXPECT_NEAR(-2.0, mat.determinant(), 0.0001);
+        EXPECT_NEAR(2.0, mat.determinant(), 0.0001);
         // mat.printMtx();
         mat(0, 0) = -1.0;
         mat(0, 1) = 2.0;
         mat(1, 0) = -3.0;
         mat(1, 1) = 4.0;
-        EXPECT_NEAR(2.0, mat.determinant(), 0.0001);
+        EXPECT_NEAR(-2.0, mat.determinant(), 0.0001);
         // mat.printMtx();
         CMatrix matNew = CMatrix(3, 3, 1.0);
         EXPECT_NEAR(0.0, matNew.determinant(), 0.0001);
@@ -268,7 +268,23 @@ namespace {
         matNew(2, 0) = 7.0;
         matNew(2, 1) = 8.0;
         matNew(2, 2) = 9.0;
-        EXPECT_NEAR(6.0, matNew.determinant(), 0.0001);
+        EXPECT_NEAR(-6.0, matNew.determinant(), 0.0001);
         // matNew.printMtx();
+    }
+
+    TEST_F(CMatrixTest, Inverse) {
+        CMatrix mat = CMatrix(2, 2, 0.0);
+        CMatrix inv;
+        mat(0, 0) = 1.0;
+        mat(0, 1) = 2.0;
+        mat(1, 0) = 3.0;
+        mat(1, 1) = 4.0;
+        inv = mat.inverse();
+        EXPECT_NEAR(-2.0, inv(0, 0), 0.0001);
+        EXPECT_NEAR(1.0, inv(0, 1), 0.0001);
+        EXPECT_NEAR(1.5, inv(1, 0), 0.0001);
+        EXPECT_NEAR(-0.5, inv(1, 1), 0.0001);
+        // mat.printMtx();
+        // inv.printMtx();
     }
 }

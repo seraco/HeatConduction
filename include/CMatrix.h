@@ -5,6 +5,9 @@
 extern "C" {
     void F77NAME(dgetrf)(const int& m, const int& n, const double* A,
                          const int& lda, int* ipiv, int& info);
+    void F77NAME(dgetri)(const int& n, const double* A,
+                         const int& lda, int* ipiv,
+                         double* work, const int& lwork, int& info);
 }
 
 class CMatrix {
@@ -30,6 +33,7 @@ class CMatrix {
         static CMatrix linspace(const double left, const double right,
                                 const unsigned nNode);
         double determinant();
+        CMatrix inverse();
 
         // Adress operator after type T is to be able to assign values when
         // there is an assignment like A(i, j) = 3

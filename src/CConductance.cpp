@@ -1,6 +1,7 @@
 #ifndef __CCONDUCTANCE_CPP
 #define __CCONDUCTANCE_CPP
 
+#include <iostream>
 #include <cmath>
 
 #include "../include/CConductance.h"
@@ -69,7 +70,7 @@ CMatrix CConductance::conductanceMtx(CMaterial mat, CMesh msh) {
     CMatrix X = CMatrix(nNodPerEl, 1, 0.0);
     CMatrix Y = CMatrix(nNodPerEl, 1, 0.0);
     CMatrix J;
-    CMatrix DetJ = CMatrix(gaussOrder, gaussOrder, 0.0);
+    double DetJ;
     double eta;
     double xi;
     CMatrix N = CMatrix(1, nNodPerEl, 0.0);
@@ -110,6 +111,7 @@ CMatrix CConductance::conductanceMtx(CMaterial mat, CMesh msh) {
                 GN(1, 3) = 0.25 * (1 - xi);
 
                 J = GN * eCoord;
+                DetJ = J.determinant();
             }
         }
     }

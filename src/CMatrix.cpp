@@ -92,7 +92,27 @@ double CMatrix::determinant() {
         }
     }
 
-    return -res;
+    delete[] vPivPtr;
+
+    return res;
+}
+
+CMatrix CMatrix::inverse() {
+    // TODO: Check for square matrix
+    int info = 0;
+    CMatrix A = CMatrix(*this);
+    int* vPivPtr = new int[nCols];
+    double* APtr = A.getMtxAddress();
+    int nWorkspace = nCols * nCols;
+    double* workspace = new double[nWorkspace];
+
+    F77NAME(dgetrf)(nCols, nCols, APtr, nCols, vPivPtr, info);
+    F77NAME(dgetri)(nCols, APtr, nCols, vPivPtr, workspace, nWorkspace, info);
+
+    delete[] vPivPtr;
+    delete[] workspace;
+
+    return A;
 }
 
 // template<typename T>
