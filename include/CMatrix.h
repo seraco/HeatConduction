@@ -1,6 +1,12 @@
 #ifndef __CMATRIX_H
 #define __CMATRIX_H
 
+#define F77NAME(x) x##_
+extern "C" {
+    void F77NAME(dgetrf)(const int& m, const int& n, const double* A,
+                         const int& lda, int* ipiv, int& info);
+}
+
 class CMatrix {
     private:
         unsigned nRows;
@@ -23,6 +29,7 @@ class CMatrix {
         double* getMtxAddress();
         static CMatrix linspace(const double left, const double right,
                                 const unsigned nNode);
+        double determinant();
 
         // Adress operator after type T is to be able to assign values when
         // there is an assignment like A(i, j) = 3

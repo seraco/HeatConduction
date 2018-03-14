@@ -13,6 +13,7 @@ class CMesh {
         unsigned nNodePerElem;
         unsigned dofPerNode;
         unsigned totalDofInElem;
+        unsigned nDofTotal;
         CGeometry geometry;
         CMatrix coorMtx;
         CMatrix topolMtx;
@@ -36,6 +37,7 @@ class CMesh {
         unsigned getNNodePerElem();
         unsigned getDofPerNode();
         unsigned getTotalDofInElem();
+        unsigned getNDofTotal();
         CGeometry getGeometry();
         CMatrix getCoorMtx();
         CMatrix getTopolMtx();

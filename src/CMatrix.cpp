@@ -75,6 +75,26 @@ CMatrix CMatrix::linspace(const double left, const double right,
     return res;
 }
 
+double CMatrix::determinant() {
+    // TODO: Check for square matrix
+    double res = 1.0;
+    int info = 0;
+    CMatrix A = CMatrix(*this);
+    int* vPivPtr = new int[nCols];
+    double* APtr = A.getMtxAddress();
+    F77NAME(dgetrf)(nCols, nCols, APtr, nCols, vPivPtr, info);
+
+    for (unsigned j = 0; j < nCols; j++) {
+        res *= A(j, j);
+        // std::cout << j << " " << vPivPtr[j] << std::endl;
+        if (j != vPivPtr[j]) {
+            res *= -1.0;
+        }
+    }
+
+    return -res;
+}
+
 // template<typename T>
 // bool CMatrix<T>::isLowerTriangular() {
 //     for (unsigned j = 0; j < nCols; j++) {

@@ -14,7 +14,7 @@ class CConductance {
         CMatrix conducMtx;
         CMesh mesh;
 
-        CMatrix conductivityMtx(CMaterial mat, CMesh msh);
+        CMatrix conductanceMtx(CMaterial mat, CMesh msh);
 
     public:
         CConductance();

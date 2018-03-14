@@ -61,6 +61,10 @@ unsigned CMesh::getTotalDofInElem() {
     return totalDofInElem;
 }
 
+unsigned CMesh::getNDofTotal() {
+    return nDofTotal;
+}
+
 CGeometry CMesh::getGeometry() {
     return geometry;
 }
@@ -148,7 +152,7 @@ CMatrix CMesh::connectivityMtx(CMatrix topol) {
 
 CMatrix CMesh::globalDofMtx(CMatrix conn) {
     CMatrix glDof = CMatrix(nNode, 2, 0.0);
-    unsigned nod, iDof, elemNDof;
+    unsigned nod, elemNDof;
 
     for (unsigned i = 0; i < nElem; i++) {
         for (unsigned j = 0; j < nNodePerElem; j++) {
@@ -157,12 +161,12 @@ CMatrix CMesh::globalDofMtx(CMatrix conn) {
         }
     }
 
-    iDof = 0;
+    nDofTotal = 0;
     for (unsigned i = 0; i < nNode; i++) {
         elemNDof = glDof(i, 0);
         for (unsigned j = 0; j < elemNDof; j++) {
-            glDof(i, j + 1) = iDof;
-            iDof++;
+            glDof(i, j + 1) = nDofTotal;
+            nDofTotal++;
         }
     }
 

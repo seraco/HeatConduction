@@ -113,5 +113,6 @@ namespace {
         EXPECT_EQ(3, glDof(3, 1));
         EXPECT_EQ(4, glDof(4, 1));
         EXPECT_EQ(5, glDof(5, 1));
+        EXPECT_EQ(6, msh.getNDofTotal());
     }
 }
