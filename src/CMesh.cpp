@@ -23,9 +23,8 @@ CMesh::CMesh(const unsigned NElx, const unsigned NEly, const CGeometry geo) {
     nNodePerElem = 4;
     dofPerNode = 1;
     totalDofInElem = nNodePerElem * dofPerNode;
-    geometry = geo;
 
-    coorMtx = coordinateMtx();
+    coorMtx = coordinateMtx(geo);
     topolMtx = topologyMtx();
     connMtx = connectivityMtx(topolMtx);
     glDofMtx = globalDofMtx(connMtx);
@@ -65,10 +64,6 @@ unsigned CMesh::getNDofTotal() {
     return nDofTotal;
 }
 
-CGeometry CMesh::getGeometry() {
-    return geometry;
-}
-
 CMatrix CMesh::getCoorMtx() {
     return coorMtx;
 }
@@ -85,14 +80,14 @@ CMatrix CMesh::getGlDofMtx() {
     return glDofMtx;
 }
 
-CMatrix CMesh::coordinateMtx() {
+CMatrix CMesh::coordinateMtx(CGeometry geo) {
     CMatrix xVec, hVec, yMat, yLocVec, coorMat;
-    double a = geometry.getAConst();
-    double b = geometry.getBConst();
-    double hLeft = geometry.getHeightLeft();
+    double a = geo.getAConst();
+    double b = geo.getBConst();
+    double hLeft = geo.getHeightLeft();
     unsigned nod;
 
-    xVec = CMatrix::linspace(0.0, geometry.getLength(), nXDirElem + 1);
+    xVec = CMatrix::linspace(0.0, geo.getLength(), nXDirElem + 1);
     hVec = (xVec^2)*a + xVec*b + hLeft;
 
     yMat = CMatrix(nYDirElem + 1, nXDirElem + 1, 0.0);

@@ -30,17 +30,6 @@ namespace {
         EXPECT_EQ(1.0 / sqrt(3.0), gaussPnt(0, 1));
         EXPECT_EQ(1, gaussWght(0, 0));
         EXPECT_EQ(1, gaussWght(0, 1));
-
-        CMaterial matFromProperty = con.getMaterial();
-        CMesh mshFromProperty = con.getMesh();
-        CGeometry geoFromProperty = con.getGeometry();
-        EXPECT_EQ(250.0, matFromProperty.getKXX());
-        EXPECT_EQ(0.0, matFromProperty.getKXY());
-        EXPECT_EQ(250.0, matFromProperty.getKYY());
-        EXPECT_EQ(2, mshFromProperty.getNXDirElem());
-        EXPECT_EQ(1, mshFromProperty.getNYDirElem());
-        EXPECT_EQ(0.2, geoFromProperty.getThickness());
-        EXPECT_EQ(3.0, geoFromProperty.getLength());
     }
 
     TEST_F(CConductanceTest, ConductanceMatrix) {

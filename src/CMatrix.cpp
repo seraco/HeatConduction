@@ -142,8 +142,8 @@ double* CMatrix::getMtxAddress() {
 }
 
 void CMatrix::printMtx() {
-    for (unsigned j = 0; j < nCols; j++) {
-        for (unsigned i = 0; i < nRows; i++) {
+    for (unsigned i = 0; i < nRows; i++) {
+        for (unsigned j = 0; j < nCols; j++) {
             std::cout.width(10);
             std::cout << mtx[j*nRows+i] << " ";
         }

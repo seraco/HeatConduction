@@ -25,10 +25,6 @@ CConductance::CConductance(const CGeometry geo, const CMaterial mat,
     gaussPoints(0, 1) = 1.0 / sqrt(3.0);
     gaussWeights = CMatrix(1, 2, 1.0);
 
-    mater = mat;
-    mesh = msh;
-    geom = geo;
-
     conducMtx = conductanceMtx(geo, mat, msh);
 }
 
@@ -46,20 +42,8 @@ CMatrix CConductance::getGaussWeights() {
     return gaussWeights;
 }
 
-CMaterial CConductance::getMaterial() {
-    return mater;
-}
-
 CMatrix CConductance::getConducMtx() {
     return conducMtx;
-}
-
-CMesh CConductance::getMesh() {
-    return mesh;
-}
-
-CGeometry CConductance::getGeometry() {
-    return geom;
 }
 
 CMatrix CConductance::conductanceMtx(CGeometry geo, CMaterial mat, CMesh msh) {

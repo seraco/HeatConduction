@@ -11,10 +11,7 @@ class CConductance {
         unsigned gaussOrder;
         CMatrix gaussPoints;
         CMatrix gaussWeights;
-        CMaterial mater;
         CMatrix conducMtx;
-        CMesh mesh;
-        CGeometry geom;
 
         CMatrix conductanceMtx(CGeometry geo, CMaterial mat, CMesh msh);
 
@@ -26,10 +23,7 @@ class CConductance {
         unsigned getGaussOrder();
         CMatrix getGaussPoints();
         CMatrix getGaussWeights();
-        CMaterial getMaterial();
         CMatrix getConducMtx();
-        CMesh getMesh();
-        CGeometry getGeometry();
 };
 
 #endif

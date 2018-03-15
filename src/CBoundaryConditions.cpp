@@ -1,0 +1,216 @@
+#ifndef __CBOUNDARYCONDITIONS_CPP
+#define __CBOUNDARYCONDITIONS_CPP
+
+#include <string>
+#include <iostream>
+#include <cmath>
+
+#include "../include/CBoundaryConditions.h"
+#include "../include/CMesh.h"
+#include "../include/CGeometry.h"
+
+CBoundaryConditions::CBoundaryConditions() {
+    gaussOrder = 2;
+    gaussPoints = CMatrix(1, 2, 0.0);
+    gaussPoints(0, 0) = -1.0 / sqrt(3.0);
+    gaussPoints(0, 1) = 1.0 / sqrt(3.0);
+    gaussWeights = CMatrix(1, 2, 1.0);
+    fluxBCLoc = "";
+    tempBCLoc = "";
+    fluxValue = 0.0;
+    tempValue = 0.0;
+    nFluxNodes = 0;
+    nTempNodes = 0;
+}
+
+CBoundaryConditions::CBoundaryConditions(std::string flLoc, double flVal,
+                                         std::string tpLoc, double tpVal,
+                                         CMesh msh, CGeometry geo) {
+    gaussOrder = 2;
+    gaussPoints = CMatrix(1, 2, 0.0);
+    gaussPoints(0, 0) = -1.0 / sqrt(3.0);
+    gaussPoints(0, 1) = 1.0 / sqrt(3.0);
+    gaussWeights = CMatrix(1, 2, 1.0);
+
+    fluxBCLoc = flLoc;
+    tempBCLoc = tpLoc;
+    fluxValue = flVal;
+    tempValue = tpVal;
+
+    fluxBCVector = computeBCFlux(msh, geo);
+    computeBCTemp(msh);
+}
+
+CBoundaryConditions::~CBoundaryConditions() {}
+
+unsigned CBoundaryConditions::getGaussOrder() {
+    return gaussOrder;
+}
+
+CMatrix CBoundaryConditions::getGaussPoints() {
+    return gaussPoints;
+}
+
+CMatrix CBoundaryConditions::getGaussWeights() {
+    return gaussWeights;
+}
+
+std::string CBoundaryConditions::getFluxBCLoc() {
+    return fluxBCLoc;
+}
+
+std::string CBoundaryConditions::getTempBCLoc() {
+    return tempBCLoc;
+}
+
+double CBoundaryConditions::getFluxValue() {
+    return fluxValue;
+}
+
+double CBoundaryConditions::getTempValue() {
+    return tempValue;
+}
+
+CMatrix CBoundaryConditions::getFluxNodes() {
+    return fluxNodes;
+}
+
+CMatrix CBoundaryConditions::getTempNodes() {
+    return tempNodes;
+}
+
+unsigned CBoundaryConditions::getNFluxNodes() {
+    return nFluxNodes;
+}
+
+unsigned CBoundaryConditions::getNTempNodes() {
+    return nTempNodes;
+}
+
+CMatrix CBoundaryConditions::getFluxBCVector() {
+    return fluxBCVector;
+}
+
+CMatrix CBoundaryConditions::getTempBCVector() {
+    return tempBCVector;
+}
+
+CMatrix CBoundaryConditions::computeBCFlux(CMesh msh, CGeometry geo) {
+    unsigned nElX = msh.getNXDirElem();
+    unsigned nElY = msh.getNYDirElem();
+    CMatrix topol = msh.getTopolMtx();
+    unsigned nDof = msh.getNDofTotal();
+    CMatrix f = CMatrix(nDof, 1, 0.0);
+    CMatrix coor = msh.getCoorMtx();
+    double thick = geo.getThickness();
+
+    if (fluxBCLoc == "bottom") {
+        fluxNodes = CMatrix(1, nElX + 1, 0.0);
+        for (unsigned j = 0; j < nElX + 1; j++) {
+            fluxNodes(0, j) = topol(0, j);
+        }
+        nFluxNodes = nElX + 1;
+    } else if (fluxBCLoc == "top") {
+        fluxNodes = CMatrix(1, nElX + 1, 0.0);
+        for (unsigned j = 0; j < nElX + 1; j++) {
+            fluxNodes(0, j) = topol(nElY, j);
+        }
+        nFluxNodes = nElX + 1;
+    } else if (fluxBCLoc == "left") {
+        fluxNodes = CMatrix(1, nElY + 1, 0.0);
+        for (unsigned i = 0; i < nElY + 1; i++) {
+            fluxNodes(0, i) = topol(i, 0);
+        }
+        nFluxNodes = nElY + 1;
+    } else if (fluxBCLoc == "right") {
+        fluxNodes = CMatrix(1, nElY + 1, 0.0);
+        for (unsigned i = 0; i < nElY + 1; i++) {
+            fluxNodes(0, i) = topol(i, nElX);
+        }
+        nFluxNodes = nElY + 1;
+    } else {
+        throw std::runtime_error("Unknown flux location");
+    }
+
+    unsigned nbe = nFluxNodes - 1;
+    CMatrix n_bc = CMatrix(4, nbe, 0.0);
+    for (unsigned j = 0; j < nbe; j++) {
+        n_bc(0, j) = fluxNodes(0, j);
+        n_bc(1, j) = fluxNodes(0, j + 1);
+        n_bc(2, j) = fluxValue;
+        n_bc(3, j) = fluxValue;
+    }
+
+    for (unsigned e = 0; e < nbe; e++) {
+        CMatrix fq = CMatrix(2, 1, 0.0);
+        unsigned node1 = n_bc(0, e);
+        unsigned node2 = n_bc(1, e);
+        CMatrix n_bce = CMatrix(1, 2, 0.0);
+        n_bce(0, 0) = n_bc(2, e);
+        n_bce(0, 1) = n_bc(3, e);
+        double x1 = coor(node1, 0);
+        double x2 = coor(node2, 0);
+        double y1 = coor(node1, 1);
+        double y2 = coor(node2, 1);
+        double detJ = sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)) / 2.0;
+
+        for (unsigned i = 0; i < gaussOrder; i++) {
+            double xi = gaussPoints(0, i);
+            CMatrix N = CMatrix(1, 2, 0.0);
+            N(0, 0) = 0.5 * (1 - xi);
+            N(0, 1) = 0.5 * (1 + xi);
+            CMatrix flux = N * n_bce.transpose();
+            fq = fq + (N.transpose() * detJ * thick * flux * gaussWeights(0, i));
+        }
+        fq = fq * (-1.0);
+        f(node1, 0) = f(node1, 0) + fq(0, 0);
+        f(node2, 0) = f(node2, 0) + fq(1, 0);
+    }
+
+    return f;
+}
+
+CMatrix CBoundaryConditions::computeBCTemp(CMesh msh) {
+        unsigned nElX = msh.getNXDirElem();
+        unsigned nElY = msh.getNYDirElem();
+        CMatrix topol = msh.getTopolMtx();
+
+        if (tempBCLoc == "bottom") {
+            tempNodes = CMatrix(1, nElX + 1, 0.0);
+            for (unsigned j = 0; j < nElX + 1; j++) {
+                tempNodes(0, j) = topol(0, j);
+            }
+            nTempNodes = nElX + 1;
+        } else if (tempBCLoc == "top") {
+            tempNodes = CMatrix(1, nElX + 1, 0.0);
+            for (unsigned j = 0; j < nElX + 1; j++) {
+                tempNodes(0, j) = topol(nElY, j);
+            }
+            nTempNodes = nElX + 1;
+        } else if (tempBCLoc == "left") {
+            tempNodes = CMatrix(1, nElY + 1, 0.0);
+            for (unsigned i = 0; i < nElY + 1; i++) {
+                tempNodes(0, i) = topol(i, 0);
+            }
+            nTempNodes = nElY + 1;
+        } else if (tempBCLoc == "right") {
+            tempNodes = CMatrix(1, nElY + 1, 0.0);
+            for (unsigned i = 0; i < nElY + 1; i++) {
+                tempNodes(0, i) = topol(i, nElX);
+            }
+            nTempNodes = nElY + 1;
+        } else {
+            throw std::runtime_error("Unknown flux location");
+        }
+
+        CMatrix tempBC = CMatrix(nTempNodes, 2, 0.0);
+        for (unsigned i = 0; i < nTempNodes; i++) {
+            tempBC(i, 0) = tempNodes(0, i);
+            tempBC(i, 1) = tempValue;
+        }
+        tempBC.printMtx();
+
+        return tempBC;
+}
+
+#endif

@@ -28,12 +28,6 @@ namespace {
         EXPECT_EQ(4, msh.getNNodePerElem());
         EXPECT_EQ(1, msh.getDofPerNode());
         EXPECT_EQ(4, msh.getTotalDofInElem());
-        geoFromMsh = msh.getGeometry();
-        EXPECT_EQ(0.0, geoFromMsh.getAConst());
-        EXPECT_EQ(1.0, geoFromMsh.getHeightLeft());
-        EXPECT_EQ(1.0, geoFromMsh.getHeightRight());
-        EXPECT_EQ(2.0, geoFromMsh.getLength());
-        EXPECT_EQ(0.2, geoFromMsh.getThickness());
     }
 
     TEST_F(CMeshTest, CoordinateMatrix) {
