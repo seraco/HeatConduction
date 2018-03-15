@@ -4,6 +4,7 @@
 #include "CMatrix.h"
 #include "CMaterial.h"
 #include "CMesh.h"
+#include "CGeometry.h"
 
 class CConductance {
     private:
@@ -13,12 +14,13 @@ class CConductance {
         CMaterial mater;
         CMatrix conducMtx;
         CMesh mesh;
+        CGeometry geom;
 
-        CMatrix conductanceMtx(CMaterial mat, CMesh msh);
+        CMatrix conductanceMtx(CGeometry geo, CMaterial mat, CMesh msh);
 
     public:
         CConductance();
-        CConductance(const CMaterial mat, const CMesh msh);
+        CConductance(const CGeometry geo, const CMaterial mat, const CMesh msh);
         virtual ~CConductance();
 
         unsigned getGaussOrder();
@@ -27,6 +29,7 @@ class CConductance {
         CMaterial getMaterial();
         CMatrix getConducMtx();
         CMesh getMesh();
+        CGeometry getGeometry();
 };
 
 #endif

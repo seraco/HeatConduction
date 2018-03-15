@@ -56,7 +56,7 @@ CMatrix CMatrix::transpose() {
 
     for (unsigned j = 0; j < nCols; j++) {
         for (unsigned i = 0; i < nRows; i++) {
-            res(i, j) = mtx[i*nRows+j];
+            res(j, i) = mtx[j*nRows+i];
         }
     }
 
@@ -144,6 +144,7 @@ double* CMatrix::getMtxAddress() {
 void CMatrix::printMtx() {
     for (unsigned j = 0; j < nCols; j++) {
         for (unsigned i = 0; i < nRows; i++) {
+            std::cout.width(10);
             std::cout << mtx[j*nRows+i] << " ";
         }
         std::cout << std::endl;
