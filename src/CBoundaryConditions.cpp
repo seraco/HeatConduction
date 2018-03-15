@@ -38,7 +38,7 @@ CBoundaryConditions::CBoundaryConditions(std::string flLoc, double flVal,
     tempValue = tpVal;
 
     fluxBCVector = computeBCFlux(msh, geo);
-    computeBCTemp(msh);
+    tempBCVector = computeBCTemp(msh);
 }
 
 CBoundaryConditions::~CBoundaryConditions() {}
@@ -93,6 +93,10 @@ CMatrix CBoundaryConditions::getFluxBCVector() {
 
 CMatrix CBoundaryConditions::getTempBCVector() {
     return tempBCVector;
+}
+
+CMatrix CBoundaryConditions::getReducedDof() {
+    return reducedDof;
 }
 
 CMatrix CBoundaryConditions::computeBCFlux(CMesh msh, CGeometry geo) {
@@ -173,6 +177,7 @@ CMatrix CBoundaryConditions::computeBCFlux(CMesh msh, CGeometry geo) {
 CMatrix CBoundaryConditions::computeBCTemp(CMesh msh) {
         unsigned nElX = msh.getNXDirElem();
         unsigned nElY = msh.getNYDirElem();
+        unsigned nDof = msh.getNDofTotal();
         CMatrix topol = msh.getTopolMtx();
 
         if (tempBCLoc == "bottom") {
@@ -208,9 +213,30 @@ CMatrix CBoundaryConditions::computeBCTemp(CMesh msh) {
             tempBC(i, 0) = tempNodes(0, i);
             tempBC(i, 1) = tempValue;
         }
-        tempBC.printMtx();
 
-        return tempBC;
+        CMatrix T = CMatrix(nDof, 1, 0.0);
+        for (unsigned i = 0; i < nTempNodes; i++) {
+            T(tempBC(i, 0), 0) = tempBC(i, 1);
+        }
+
+        CMatrix OrgDof = CMatrix(1, nDof, 0.0);
+        for (unsigned i = 0; i < nTempNodes; i++) {
+            OrgDof(0, tempBC(i, 0)) = -1.0;
+        }
+
+        unsigned rDof = nDof - nTempNodes;
+        CMatrix RedDof = CMatrix(1, rDof, 0.0);
+        unsigned count = 0;
+        for (unsigned i = 0; i < nDof; i++) {
+            if (OrgDof(0, i) == 0.0) {
+                OrgDof(0, i) = count;
+                RedDof(0, count) = i;
+                count++;
+            }
+        }
+        reducedDof = RedDof;
+
+        return T;
 }
 
 #endif
