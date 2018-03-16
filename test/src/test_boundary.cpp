@@ -72,7 +72,7 @@ namespace {
         EXPECT_EQ(0.0, T(3, 0));
         EXPECT_EQ(0.0, T(4, 0));
         EXPECT_EQ(0.0, T(5, 0));
-        CMatrix RedDof = bnd.getReducedDof();
+        CMatrix RedDof = bnd.getReducedDofVector();
         EXPECT_EQ(2, RedDof(0, 0));
         EXPECT_EQ(3, RedDof(0, 1));
         EXPECT_EQ(4, RedDof(0, 2));

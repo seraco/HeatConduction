@@ -22,7 +22,8 @@ class CBoundaryConditions {
         unsigned nTempNodes;
         CMatrix fluxBCVector;
         CMatrix tempBCVector;
-        CMatrix reducedDof;
+        CMatrix reducedDofVector;
+        unsigned nReducedDof;
 
         CMatrix computeBCFlux(CMesh msh, CGeometry geo);
         CMatrix computeBCTemp(CMesh msh);
@@ -47,7 +48,8 @@ class CBoundaryConditions {
         unsigned getNTempNodes();
         CMatrix getFluxBCVector();
         CMatrix getTempBCVector();
-        CMatrix getReducedDof();
+        CMatrix getReducedDofVector();
+        unsigned getNReducedDof();
 };
 
 #endif

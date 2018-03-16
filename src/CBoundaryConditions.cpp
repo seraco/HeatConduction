@@ -95,8 +95,12 @@ CMatrix CBoundaryConditions::getTempBCVector() {
     return tempBCVector;
 }
 
-CMatrix CBoundaryConditions::getReducedDof() {
-    return reducedDof;
+CMatrix CBoundaryConditions::getReducedDofVector() {
+    return reducedDofVector;
+}
+
+unsigned CBoundaryConditions::getNReducedDof() {
+    return nReducedDof;
 }
 
 CMatrix CBoundaryConditions::computeBCFlux(CMesh msh, CGeometry geo) {
@@ -224,8 +228,8 @@ CMatrix CBoundaryConditions::computeBCTemp(CMesh msh) {
             OrgDof(0, tempBC(i, 0)) = -1.0;
         }
 
-        unsigned rDof = nDof - nTempNodes;
-        CMatrix RedDof = CMatrix(1, rDof, 0.0);
+        nReducedDof = nDof - nTempNodes;
+        CMatrix RedDof = CMatrix(1, nReducedDof, 0.0);
         unsigned count = 0;
         for (unsigned i = 0; i < nDof; i++) {
             if (OrgDof(0, i) == 0.0) {
@@ -234,7 +238,7 @@ CMatrix CBoundaryConditions::computeBCTemp(CMesh msh) {
                 count++;
             }
         }
-        reducedDof = RedDof;
+        reducedDofVector = RedDof;
 
         return T;
 }
