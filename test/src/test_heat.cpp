@@ -13,7 +13,7 @@ namespace {
         CConductance con = CConductance(geo, mat, msh);
         CBoundaryConditions bnd = CBoundaryConditions("bottom", -5000.0,
                                                       "left", -20.0, msh, geo);
-        CHeatConduction heat = CHeatConduction(bnd, con);
+        CHeatConduction heat = CHeatConduction(bnd, con, msh);
     }
 
     TEST_F(CHeatConductionTest, PartitionMatrices) {
@@ -23,7 +23,7 @@ namespace {
         CConductance con = CConductance(geo, mat, msh);
         CBoundaryConditions bnd = CBoundaryConditions("bottom", -5000.0,
                                                       "left", -20.0, msh, geo);
-        CHeatConduction heat = CHeatConduction(bnd, con);
+        CHeatConduction heat = CHeatConduction(bnd, con, msh);
 
         CMatrix Te = heat.getTe();
         EXPECT_EQ(-20.0, Te(0, 0));
@@ -68,5 +68,23 @@ namespace {
         EXPECT_NEAR(7.3927, Kef(1, 1), 0.0001);
         EXPECT_NEAR(0.0, Kef(1, 2), 0.0001);
         EXPECT_NEAR(0.0, Kef(1, 3), 0.0001);
+    }
+
+    TEST_F(CHeatConductionTest, TemperatureSolution) {
+        CMaterial mat = CMaterial(250.0, 0.0, 250.0);
+        CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
+        CMesh msh = CMesh(2, 1, geo);
+        CConductance con = CConductance(geo, mat, msh);
+        CBoundaryConditions bnd = CBoundaryConditions("bottom", -5000.0,
+                                                      "left", -20.0, msh, geo);
+        CHeatConduction heat = CHeatConduction(bnd, con, msh);
+
+        CMatrix T = heat.getTemp();
+        EXPECT_NEAR(-20.0, T(0, 0), 0.0001);
+        EXPECT_NEAR(-20.0, T(1, 0), 0.0001);
+        EXPECT_NEAR(70.8459, T(2, 0), 0.0001);
+        EXPECT_NEAR(62.9202, T(3, 0), 0.0001);
+        EXPECT_NEAR(97.607, T(4, 0), 0.0001);
+        EXPECT_NEAR(85.1676, T(5, 0), 0.0001);
     }
 }
