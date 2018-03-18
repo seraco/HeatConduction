@@ -87,4 +87,22 @@ namespace {
         EXPECT_NEAR(97.607, T(4, 0), 0.0001);
         EXPECT_NEAR(85.1676, T(5, 0), 0.0001);
     }
+
+    TEST_F(CHeatConductionTest, FluxSolution) {
+        CMaterial mat = CMaterial(250.0, 0.0, 250.0);
+        CGeometry geo = CGeometry(0.25, 1.0, 1.3, 3.0, 0.2);
+        CMesh msh = CMesh(2, 1, geo);
+        CConductance con = CConductance(geo, mat, msh);
+        CBoundaryConditions bnd = CBoundaryConditions("bottom", -5000.0,
+                                                      "left", -20.0, msh, geo);
+        CHeatConduction heat = CHeatConduction(bnd, con, msh);
+
+        CMatrix F = heat.getFlux();
+        EXPECT_NEAR(-1038.3738, F(0, 0), 0.0001);
+        EXPECT_NEAR(-1260.4073, F(1, 0), 0.0001);
+        EXPECT_NEAR(1527.9188, F(2, 0), 0.0001);
+        EXPECT_NEAR(0.0, F(3, 0), 0.0001);
+        EXPECT_NEAR(770.8622, F(4, 0), 0.0001);
+        EXPECT_NEAR(0.0, F(5, 0), 0.0001);
+    }
 }

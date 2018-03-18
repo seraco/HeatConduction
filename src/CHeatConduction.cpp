@@ -13,6 +13,7 @@ CHeatConduction::CHeatConduction(CBoundaryConditions bnd, CConductance cnd,
                                  CMesh msh) {
     partitionMatrices(bnd, cnd);
     temp = solveTemperature(msh, bnd);
+    flux = solveFlux(msh, bnd);
 }
 
 CHeatConduction::~CHeatConduction() {}
@@ -109,6 +110,27 @@ CMatrix CHeatConduction::solveTemperature(CMesh msh, CBoundaryConditions bnd) {
     }
 
     return T;
+}
+
+CMatrix CHeatConduction::solveFlux(CMesh msh, CBoundaryConditions bnd) {
+    unsigned nDof = msh.getNDofTotal();
+    CMatrix F = CMatrix(nDof, 1, 0.0);
+    unsigned nTNod = bnd.getNTempNodes();
+    CMatrix tpNod = bnd.getTempNodes();
+    unsigned rDof = bnd.getNReducedDof();
+    CMatrix rDofVec = bnd.getReducedDofVector();
+
+    Fe = Kee * Te + Kef * Tf;
+
+    for (unsigned i = 0; i < nTNod; i++) {
+        F(tpNod(0, i), 0) = Fe(i, 0);
+    }
+
+    for (unsigned i = 0; i < rDof; i++) {
+        F(rDofVec(0, i), 0) = Ff(i, 0);
+    }
+
+    return F;
 }
 
 #endif

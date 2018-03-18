@@ -20,6 +20,7 @@ class CHeatConduction {
 
         void partitionMatrices(CBoundaryConditions bnd, CConductance cnd);
         CMatrix solveTemperature(CMesh msh, CBoundaryConditions bnd);
+        CMatrix solveFlux(CMesh msh, CBoundaryConditions bnd);
 
     public:
         CHeatConduction();
