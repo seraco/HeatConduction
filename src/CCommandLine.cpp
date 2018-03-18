@@ -89,63 +89,63 @@ CCommandLine::CCommandLine(int argc, char const *argv[]) {
 
 CCommandLine::~CCommandLine() {}
 
-double CCommandLine::getAConst() {
+double CCommandLine::getAConst() const {
     return aConst;
 }
 
-double CCommandLine::getLeftHeight() {
+double CCommandLine::getLeftHeight() const {
     return leftHeight;
 }
 
-double CCommandLine::getRightHeight() {
+double CCommandLine::getRightHeight() const {
     return rightHeight;
 }
 
-double CCommandLine::getLength() {
+double CCommandLine::getLength() const {
     return length;
 }
 
-double CCommandLine::getThickness() {
+double CCommandLine::getThickness() const {
     return thickness;
 }
 
-double CCommandLine::getKXX() {
+double CCommandLine::getKXX() const {
     return kXX;
 }
 
-double CCommandLine::getKXY() {
+double CCommandLine::getKXY() const {
     return kXY;
 }
 
-double CCommandLine::getKYY() {
+double CCommandLine::getKYY() const {
     return kYY;
 }
 
-unsigned CCommandLine::getNx() {
+unsigned CCommandLine::getNx() const {
     return Nx;
 }
 
-unsigned CCommandLine::getNy() {
+unsigned CCommandLine::getNy() const {
     return Ny;
 }
 
-std::string CCommandLine::getFluxLocation() {
+std::string CCommandLine::getFluxLocation() const {
     return fluxLocation;
 }
 
-double CCommandLine::getFluxValue() {
+double CCommandLine::getFluxValue() const {
     return fluxValue;
 }
 
-std::string CCommandLine::getTempLocation() {
+std::string CCommandLine::getTempLocation() const {
     return tempLocation;
 }
 
-double CCommandLine::getTempValue() {
+double CCommandLine::getTempValue() const {
     return tempValue;
 }
 
-bool CCommandLine::getAbleToRun() {
+bool CCommandLine::getAbleToRun() const {
     return ableToRun;
 }
 

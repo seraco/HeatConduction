@@ -25,21 +25,21 @@ class CCommandLine {
         CCommandLine(int argc, char const *argv[]);
         virtual ~CCommandLine();
 
-        double getAConst();
-        double getLeftHeight();
-        double getRightHeight();
-        double getLength();
-        double getThickness();
-        double getKXX();
-        double getKXY();
-        double getKYY();
-        unsigned getNx();
-        unsigned getNy();
-        std::string getFluxLocation();
-        double getFluxValue();
-        std::string getTempLocation();
-        double getTempValue();
-        bool getAbleToRun();
+        double getAConst() const;
+        double getLeftHeight() const;
+        double getRightHeight() const;
+        double getLength() const;
+        double getThickness() const;
+        double getKXX() const;
+        double getKXY() const;
+        double getKYY() const;
+        unsigned getNx() const;
+        unsigned getNy() const;
+        std::string getFluxLocation() const;
+        double getFluxValue() const;
+        std::string getTempLocation() const;
+        double getTempValue() const;
+        bool getAbleToRun() const;
 };
 
 #endif
