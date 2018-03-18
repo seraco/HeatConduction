@@ -23,9 +23,12 @@ CBoundaryConditions::CBoundaryConditions() {
     nTempNodes = 0;
 }
 
-CBoundaryConditions::CBoundaryConditions(std::string flLoc, double flVal,
-                                         std::string tpLoc, double tpVal,
-                                         CMesh msh, CGeometry geo) {
+CBoundaryConditions::CBoundaryConditions(const std::string flLoc,
+                                         const double flVal,
+                                         const std::string tpLoc,
+                                         const double tpVal,
+                                         const CMesh& msh,
+                                         const CGeometry& geo) {
     gaussOrder = 2;
     gaussPoints = CMatrix(1, 2, 0.0);
     gaussPoints(0, 0) = -1.0 / sqrt(3.0);
@@ -43,67 +46,68 @@ CBoundaryConditions::CBoundaryConditions(std::string flLoc, double flVal,
 
 CBoundaryConditions::~CBoundaryConditions() {}
 
-unsigned CBoundaryConditions::getGaussOrder() {
+unsigned CBoundaryConditions::getGaussOrder() const {
     return gaussOrder;
 }
 
-CMatrix CBoundaryConditions::getGaussPoints() {
+CMatrix CBoundaryConditions::getGaussPoints() const {
     return gaussPoints;
 }
 
-CMatrix CBoundaryConditions::getGaussWeights() {
+CMatrix CBoundaryConditions::getGaussWeights() const {
     return gaussWeights;
 }
 
-std::string CBoundaryConditions::getFluxBCLoc() {
+std::string CBoundaryConditions::getFluxBCLoc() const {
     return fluxBCLoc;
 }
 
-std::string CBoundaryConditions::getTempBCLoc() {
+std::string CBoundaryConditions::getTempBCLoc() const {
     return tempBCLoc;
 }
 
-double CBoundaryConditions::getFluxValue() {
+double CBoundaryConditions::getFluxValue() const {
     return fluxValue;
 }
 
-double CBoundaryConditions::getTempValue() {
+double CBoundaryConditions::getTempValue() const {
     return tempValue;
 }
 
-CMatrix CBoundaryConditions::getFluxNodes() {
+CMatrix CBoundaryConditions::getFluxNodes() const {
     return fluxNodes;
 }
 
-CMatrix CBoundaryConditions::getTempNodes() {
+CMatrix CBoundaryConditions::getTempNodes() const {
     return tempNodes;
 }
 
-unsigned CBoundaryConditions::getNFluxNodes() {
+unsigned CBoundaryConditions::getNFluxNodes() const {
     return nFluxNodes;
 }
 
-unsigned CBoundaryConditions::getNTempNodes() {
+unsigned CBoundaryConditions::getNTempNodes() const {
     return nTempNodes;
 }
 
-CMatrix CBoundaryConditions::getFluxBCVector() {
+CMatrix CBoundaryConditions::getFluxBCVector() const {
     return fluxBCVector;
 }
 
-CMatrix CBoundaryConditions::getTempBCVector() {
+CMatrix CBoundaryConditions::getTempBCVector() const {
     return tempBCVector;
 }
 
-CMatrix CBoundaryConditions::getReducedDofVector() {
+CMatrix CBoundaryConditions::getReducedDofVector() const {
     return reducedDofVector;
 }
 
-unsigned CBoundaryConditions::getNReducedDof() {
+unsigned CBoundaryConditions::getNReducedDof() const {
     return nReducedDof;
 }
 
-CMatrix CBoundaryConditions::computeBCFlux(CMesh msh, CGeometry geo) {
+CMatrix CBoundaryConditions::computeBCFlux(const CMesh& msh,
+                                           const CGeometry& geo) {
     unsigned nElX = msh.getNXDirElem();
     unsigned nElY = msh.getNYDirElem();
     CMatrix topol = msh.getTopolMtx();
@@ -178,7 +182,7 @@ CMatrix CBoundaryConditions::computeBCFlux(CMesh msh, CGeometry geo) {
     return f;
 }
 
-CMatrix CBoundaryConditions::computeBCTemp(CMesh msh) {
+CMatrix CBoundaryConditions::computeBCTemp(const CMesh& msh) {
         unsigned nElX = msh.getNXDirElem();
         unsigned nElY = msh.getNYDirElem();
         unsigned nDof = msh.getNDofTotal();

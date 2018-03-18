@@ -29,18 +29,18 @@ class CMesh {
         CMesh(const unsigned NElx, const unsigned NEly, const CGeometry geo);
         virtual ~CMesh();
 
-        unsigned getNXDirElem();
-        unsigned getNYDirElem();
-        unsigned getNElem();
-        unsigned getNNode();
-        unsigned getNNodePerElem();
-        unsigned getDofPerNode();
-        unsigned getTotalDofInElem();
-        unsigned getNDofTotal();
-        CMatrix getCoorMtx();
-        CMatrix getTopolMtx();
-        CMatrix getConnMtx();
-        CMatrix getGlDofMtx();
+        unsigned getNXDirElem() const;
+        unsigned getNYDirElem() const;
+        unsigned getNElem() const;
+        unsigned getNNode() const;
+        unsigned getNNodePerElem() const;
+        unsigned getDofPerNode() const;
+        unsigned getTotalDofInElem() const;
+        unsigned getNDofTotal() const;
+        CMatrix getCoorMtx() const;
+        CMatrix getTopolMtx() const;
+        CMatrix getConnMtx() const;
+        CMatrix getGlDofMtx() const;
 };
 
 #endif

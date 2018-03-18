@@ -25,31 +25,31 @@ class CBoundaryConditions {
         CMatrix reducedDofVector;
         unsigned nReducedDof;
 
-        CMatrix computeBCFlux(CMesh msh, CGeometry geo);
-        CMatrix computeBCTemp(CMesh msh);
+        CMatrix computeBCFlux(const CMesh& msh, const CGeometry& geo);
+        CMatrix computeBCTemp(const CMesh& msh);
 
     public:
         CBoundaryConditions();
-        CBoundaryConditions(std::string flLoc, double flVal,
-                            std::string tpLoc, double tpVal,
-                            CMesh msh, CGeometry geo);
+        CBoundaryConditions(const std::string flLoc, const double flVal,
+                            const std::string tpLoc, const double tpVal,
+                            const CMesh& msh, const CGeometry& geo);
         virtual ~CBoundaryConditions();
 
-        unsigned getGaussOrder();
-        CMatrix getGaussPoints();
-        CMatrix getGaussWeights();
-        std::string getFluxBCLoc();
-        std::string getTempBCLoc();
-        double getFluxValue();
-        double getTempValue();
-        CMatrix getFluxNodes();
-        CMatrix getTempNodes();
-        unsigned getNFluxNodes();
-        unsigned getNTempNodes();
-        CMatrix getFluxBCVector();
-        CMatrix getTempBCVector();
-        CMatrix getReducedDofVector();
-        unsigned getNReducedDof();
+        unsigned getGaussOrder() const;
+        CMatrix getGaussPoints() const;
+        CMatrix getGaussWeights() const;
+        std::string getFluxBCLoc() const;
+        std::string getTempBCLoc() const;
+        double getFluxValue() const;
+        double getTempValue() const;
+        CMatrix getFluxNodes() const;
+        CMatrix getTempNodes() const;
+        unsigned getNFluxNodes() const;
+        unsigned getNTempNodes() const;
+        CMatrix getFluxBCVector() const;
+        CMatrix getTempBCVector() const;
+        CMatrix getReducedDofVector() const;
+        unsigned getNReducedDof() const;
 };
 
 #endif

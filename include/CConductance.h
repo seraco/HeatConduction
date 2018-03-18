@@ -13,17 +13,19 @@ class CConductance {
         CMatrix gaussWeights;
         CMatrix conducMtx;
 
-        CMatrix conductanceMtx(CGeometry geo, CMaterial mat, CMesh msh);
+        CMatrix conductanceMtx(const CGeometry& geo, const CMaterial& mat,
+                               const CMesh& msh);
 
     public:
         CConductance();
-        CConductance(const CGeometry geo, const CMaterial mat, const CMesh msh);
+        CConductance(const CGeometry& geo, const CMaterial& mat,
+                     const CMesh& msh);
         virtual ~CConductance();
 
-        unsigned getGaussOrder();
-        CMatrix getGaussPoints();
-        CMatrix getGaussWeights();
-        CMatrix getConducMtx();
+        unsigned getGaussOrder() const;
+        CMatrix getGaussPoints() const;
+        CMatrix getGaussWeights() const;
+        CMatrix getConducMtx() const;
 };
 
 #endif

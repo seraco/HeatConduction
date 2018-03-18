@@ -32,51 +32,51 @@ CMesh::CMesh(const unsigned NElx, const unsigned NEly, const CGeometry geo) {
 
 CMesh::~CMesh() {}
 
-unsigned CMesh::getNXDirElem() {
+unsigned CMesh::getNXDirElem() const {
     return nXDirElem;
 }
 
-unsigned CMesh::getNYDirElem() {
+unsigned CMesh::getNYDirElem() const {
     return nYDirElem;
 }
 
-unsigned CMesh::getNElem() {
+unsigned CMesh::getNElem() const {
     return nElem;
 }
 
-unsigned CMesh::getNNode() {
+unsigned CMesh::getNNode() const {
     return nNode;
 }
 
-unsigned CMesh::getNNodePerElem() {
+unsigned CMesh::getNNodePerElem() const {
     return nNodePerElem;
 }
 
-unsigned CMesh::getDofPerNode() {
+unsigned CMesh::getDofPerNode() const {
     return dofPerNode;
 }
 
-unsigned CMesh::getTotalDofInElem() {
+unsigned CMesh::getTotalDofInElem() const {
     return totalDofInElem;
 }
 
-unsigned CMesh::getNDofTotal() {
+unsigned CMesh::getNDofTotal() const {
     return nDofTotal;
 }
 
-CMatrix CMesh::getCoorMtx() {
+CMatrix CMesh::getCoorMtx() const {
     return coorMtx;
 }
 
-CMatrix CMesh::getTopolMtx() {
+CMatrix CMesh::getTopolMtx() const {
     return topolMtx;
 }
 
-CMatrix CMesh::getConnMtx() {
+CMatrix CMesh::getConnMtx() const {
     return connMtx;
 }
 
-CMatrix CMesh::getGlDofMtx() {
+CMatrix CMesh::getGlDofMtx() const {
     return glDofMtx;
 }
 

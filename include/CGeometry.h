@@ -16,13 +16,13 @@ class CGeometry {
                   const double L, const double th);
         virtual ~CGeometry();
 
-        double getAConst();
-        double getBConst();
-        double getHeightLeft();
-        double getHeightRight();
-        double getLength();
-        double getThickness();
-        double getHeight(double const x);
+        double getAConst() const;
+        double getBConst() const;
+        double getHeightLeft() const;
+        double getHeightRight() const;
+        double getLength() const;
+        double getThickness() const;
+        double getHeight(double const x) const;
 };
 
 #endif

@@ -9,8 +9,9 @@
 
 CHeatConduction::CHeatConduction() {}
 
-CHeatConduction::CHeatConduction(CBoundaryConditions bnd, CConductance cnd,
-                                 CMesh msh) {
+CHeatConduction::CHeatConduction(const CBoundaryConditions& bnd,
+                                 const CConductance& cnd,
+                                 const CMesh& msh) {
     partitionMatrices(bnd, cnd);
     temp = solveTemperature(msh, bnd);
     flux = solveFlux(msh, bnd);
@@ -18,37 +19,37 @@ CHeatConduction::CHeatConduction(CBoundaryConditions bnd, CConductance cnd,
 
 CHeatConduction::~CHeatConduction() {}
 
-CMatrix CHeatConduction::getKee() {
+CMatrix CHeatConduction::getKee() const {
     return Kee;
 }
 
-CMatrix CHeatConduction::getKff() {
+CMatrix CHeatConduction::getKff() const {
     return Kff;
 }
 
-CMatrix CHeatConduction::getKef() {
+CMatrix CHeatConduction::getKef() const {
     return Kef;
 }
 
-CMatrix CHeatConduction::getTe() {
+CMatrix CHeatConduction::getTe() const {
     return Te;
 }
 
-CMatrix CHeatConduction::getFf() {
+CMatrix CHeatConduction::getFf() const {
     return Ff;
 }
 
 
-CMatrix CHeatConduction::getTemp() {
+CMatrix CHeatConduction::getTemp() const {
     return temp;
 }
 
-CMatrix CHeatConduction::getFlux() {
+CMatrix CHeatConduction::getFlux() const {
     return flux;
 }
 
-void CHeatConduction::partitionMatrices(CBoundaryConditions bnd,
-                                        CConductance cnd) {
+void CHeatConduction::partitionMatrices(const CBoundaryConditions& bnd,
+                                        const CConductance& cnd) {
     unsigned nTNod = bnd.getNTempNodes();
     CMatrix tpNod = bnd.getTempNodes();
     unsigned rDof = bnd.getNReducedDof();
@@ -89,7 +90,8 @@ void CHeatConduction::partitionMatrices(CBoundaryConditions bnd,
     }
 }
 
-CMatrix CHeatConduction::solveTemperature(CMesh msh, CBoundaryConditions bnd) {
+CMatrix CHeatConduction::solveTemperature(const CMesh& msh,
+                                          const CBoundaryConditions& bnd) {
     unsigned nDof = msh.getNDofTotal();
     CMatrix T = CMatrix(nDof, 1, 0.0);
     unsigned nTNod = bnd.getNTempNodes();
@@ -112,7 +114,8 @@ CMatrix CHeatConduction::solveTemperature(CMesh msh, CBoundaryConditions bnd) {
     return T;
 }
 
-CMatrix CHeatConduction::solveFlux(CMesh msh, CBoundaryConditions bnd) {
+CMatrix CHeatConduction::solveFlux(const CMesh& msh,
+                                   const CBoundaryConditions& bnd) {
     unsigned nDof = msh.getNDofTotal();
     CMatrix F = CMatrix(nDof, 1, 0.0);
     unsigned nTNod = bnd.getNTempNodes();

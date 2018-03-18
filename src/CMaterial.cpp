@@ -18,7 +18,7 @@ CMaterial::CMaterial(const double kXX, const double kXY, const double kYY) {
 
 CMaterial::~CMaterial() {}
 
-CMatrix CMaterial::getConductivityMatrix() {
+CMatrix CMaterial::getConductivityMatrix() const {
     CMatrix res = CMatrix(2, 2, 0.0);
 
     res(0, 0) = conducXX;
@@ -29,15 +29,15 @@ CMatrix CMaterial::getConductivityMatrix() {
     return res;
 }
 
-double CMaterial::getKXX() {
+double CMaterial::getKXX() const {
     return conducXX;
 }
 
-double CMaterial::getKXY() {
+double CMaterial::getKXY() const {
     return conducXY;
 }
 
-double CMaterial::getKYY() {
+double CMaterial::getKYY() const {
     return conducYY;
 }
 

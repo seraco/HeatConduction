@@ -24,31 +24,31 @@ CGeometry::CGeometry(const double a, const double h1, const double h2,
 
 CGeometry::~CGeometry() {}
 
-double CGeometry::getAConst() {
+double CGeometry::getAConst() const {
     return aConst;
 }
 
-double CGeometry::getBConst() {
+double CGeometry::getBConst() const {
     return bConst;
 }
 
-double CGeometry::getHeightLeft() {
+double CGeometry::getHeightLeft() const {
     return heightLeft;
 }
 
-double CGeometry::getHeightRight() {
+double CGeometry::getHeightRight() const {
     return heightRight;
 }
 
-double CGeometry::getLength() {
+double CGeometry::getLength() const {
     return length;
 }
 
-double CGeometry::getThickness() {
+double CGeometry::getThickness() const {
     return thickness;
 }
 
-double CGeometry::getHeight(const double x) {
+double CGeometry::getHeight(const double x) const {
     return aConst*x*x + bConst*x + heightLeft;
 }
 

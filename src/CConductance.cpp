@@ -17,8 +17,8 @@ CConductance::CConductance() {
     gaussWeights = CMatrix(1, 2, 1.0);
 }
 
-CConductance::CConductance(const CGeometry geo, const CMaterial mat,
-                           const CMesh msh) {
+CConductance::CConductance(const CGeometry& geo, const CMaterial& mat,
+                           const CMesh& msh) {
     gaussOrder = 2;
     gaussPoints = CMatrix(1, 2, 0.0);
     gaussPoints(0, 0) = -1.0 / sqrt(3.0);
@@ -30,23 +30,24 @@ CConductance::CConductance(const CGeometry geo, const CMaterial mat,
 
 CConductance::~CConductance() {}
 
-unsigned CConductance::getGaussOrder() {
+unsigned CConductance::getGaussOrder() const {
     return gaussOrder;
 }
 
-CMatrix CConductance::getGaussPoints() {
+CMatrix CConductance::getGaussPoints() const {
     return gaussPoints;
 }
 
-CMatrix CConductance::getGaussWeights() {
+CMatrix CConductance::getGaussWeights() const {
     return gaussWeights;
 }
 
-CMatrix CConductance::getConducMtx() {
+CMatrix CConductance::getConducMtx() const {
     return conducMtx;
 }
 
-CMatrix CConductance::conductanceMtx(CGeometry geo, CMaterial mat, CMesh msh) {
+CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
+                                     const CMesh& msh) {
     double thick = geo.getThickness();
     unsigned nDof = msh.getNDofTotal();
     unsigned nEl = msh.getNElem();

@@ -14,10 +14,10 @@ class CMaterial {
         CMaterial(const double kXX, const double kXY, const double kYY);
         virtual ~CMaterial();
 
-        CMatrix getConductivityMatrix();
-        double getKXX();
-        double getKXY();
-        double getKYY();
+        CMatrix getConductivityMatrix() const;
+        double getKXX() const;
+        double getKXY() const;
+        double getKYY() const;
 };
 
 #endif
