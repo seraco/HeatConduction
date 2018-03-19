@@ -143,6 +143,7 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
         }
     }
 
+    // TODO: Improve communication to be faster!
     if (nRanks > 1) {
         if (rank == 0) {
             CMatrix Krec = CMatrix(nDof, nDof, 0.0);

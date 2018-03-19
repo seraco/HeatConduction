@@ -16,11 +16,8 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("An error occurred initialising MPI");
     }
 
-    int rank, nRanks;
-    if (
-        MPI_Comm_rank(MPI_COMM_WORLD, &rank) == MPI_ERR_COMM ||
-        MPI_Comm_size(MPI_COMM_WORLD, &nRanks) == MPI_ERR_COMM
-    ) {
+    int rank;
+    if (MPI_Comm_rank(MPI_COMM_WORLD, &rank) == MPI_ERR_COMM) {
         throw std::runtime_error("Invalid communicator");
     }
 
@@ -48,13 +45,11 @@ int main(int argc, char *argv[]) {
         CMesh msh = CMesh(Nx, Ny, geo);
 
         CConductance con = CConductance(geo, mat, msh);
-        if (rank == 0) {
-            CBoundaryConditions bnd = CBoundaryConditions(flLoc, flVal,
-                                                          tpLoc, tpVal, msh, geo);
-            CHeatConduction heat = CHeatConduction(bnd, con, msh);
+        CBoundaryConditions bnd = CBoundaryConditions(flLoc, flVal,
+                                                      tpLoc, tpVal, msh, geo);
+        CHeatConduction heat = CHeatConduction(bnd, con, msh);
 
-            writeVTK("disp.vtk", msh, heat);
-        }
+        if (rank == 0) writeVTK("disp.vtk", msh, heat);
     }
 
     MPI_Finalize();
