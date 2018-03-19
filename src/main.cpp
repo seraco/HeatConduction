@@ -8,6 +8,7 @@
 #include "../include/CConductance.h"
 #include "../include/CBoundaryConditions.h"
 #include "../include/CHeatConduction.h"
+#include "../include/WriteVTK.h"
 
 int main(int argc, char const *argv[]) {
     CCommandLine cmd = CCommandLine(argc, argv);
@@ -37,11 +38,7 @@ int main(int argc, char const *argv[]) {
                                                       tpLoc, tpVal, msh, geo);
         CHeatConduction heat = CHeatConduction(bnd, con, msh);
 
-        std::cout << "The temperature is:" << std::endl;
-        heat.getTemp().printMtx();
-
-        std::cout << "The flux is:" << std::endl;
-        heat.getFlux().printMtx();
+        writeVTK("disp.vtk", msh, heat);
     }
 
     return 0;

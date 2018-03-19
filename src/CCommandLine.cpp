@@ -9,7 +9,6 @@
 #include "../include/CCommandLine.h"
 
 CCommandLine::CCommandLine(int argc, char const *argv[]) {
-    std::cout << "\nStarting solver...\n\n";
     std::cout << R"(
              _       _    _            _                 _
             / /\    / /\ /\ \         / /\              /\ \         _          _
@@ -25,6 +24,7 @@ CCommandLine::CCommandLine(int argc, char const *argv[]) {
 
     )" << "\n";
     std::cout << "Version 0.0.1\n\n";
+    std::cout << "\nStarting solver...\n\n";
     namespace po = boost::program_options;
     po::options_description desc("Program options");
     desc.add_options()
