@@ -10,6 +10,7 @@
 #include "../include/CMatrix.h"
 #include "../include/CHeatConduction.h"
 
+// TODO: Write in binary format!!
 void writeVTK(std::string fname, const CMesh& msh, const CHeatConduction& heat) {
     unsigned nNod = msh.getNNode();
     unsigned nEle = msh.getNElem();
