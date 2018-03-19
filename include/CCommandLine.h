@@ -22,7 +22,7 @@ class CCommandLine {
         bool ableToRun;
 
     public:
-        CCommandLine(int argc, char const *argv[]);
+        CCommandLine(int argc, char *argv[]);
         virtual ~CCommandLine();
 
         double getAConst() const;

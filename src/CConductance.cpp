@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <mpi.h>
 
 #include "../include/CConductance.h"
 #include "../include/CMaterial.h"
@@ -69,7 +70,19 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
     CMatrix GN = CMatrix(2, nNodPerEl, 0.0);
     CMatrix B;
 
-    for (unsigned e = 0; e < nEl; e++) {
+    int rank;
+    int nRanks;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nRanks);
+    // printf("Hello: rank %d, world: %d\n",rank, nRanks);
+
+    unsigned initEl = rank * (nEl / nRanks);
+    unsigned finaEl = (rank + 1) * (nEl / nRanks);
+    if (rank == 1 && nEl % 2 != 0) finaEl++;
+
+    // std::cout << initEl << finaEl << nEl << std::endl;
+
+    for (unsigned e = initEl; e < finaEl; e++) {
         eNodes(0, 0) = conn(e, 1);
         eNodes(0, 1) = conn(e, 2);
         eNodes(0, 2) = conn(e, 3);
@@ -127,6 +140,22 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
                 jDof = gDf(0, j);
                 K(iDof, jDof) = K(iDof, jDof) + Ke(i, j);
             }
+        }
+    }
+
+    if (nRanks > 1) {
+        if (rank == 0) {
+            CMatrix Krec = CMatrix(nDof, nDof, 0.0);
+            MPI_Send(&K(0, 0), nDof * nDof, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
+            MPI_Recv(&Krec(0, 0), nDof * nDof, MPI_DOUBLE, 1, 1, MPI_COMM_WORLD,
+                     MPI_STATUS_IGNORE);
+            K += Krec;
+        } else {
+            CMatrix Krec = CMatrix(nDof, nDof, 0.0);
+            MPI_Recv(&Krec(0, 0), nDof * nDof, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD,
+                     MPI_STATUS_IGNORE);
+            MPI_Send(&K(0, 0), nDof * nDof, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+            K += Krec;
         }
     }
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <mpi.h>
 
 #include "../include/CCommandLine.h"
 #include "../include/CMaterial.h"
@@ -10,9 +11,21 @@
 #include "../include/CHeatConduction.h"
 #include "../include/WriteVTK.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
+    if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {
+        throw std::runtime_error("An error occurred initialising MPI");
+    }
+
+    int rank, nRanks;
+    if (
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank) == MPI_ERR_COMM ||
+        MPI_Comm_size(MPI_COMM_WORLD, &nRanks) == MPI_ERR_COMM
+    ) {
+        throw std::runtime_error("Invalid communicator");
+    }
+
     CCommandLine cmd = CCommandLine(argc, argv);
-    bool isRunnable = cmd.getAbleToRun();
+    bool isRunnable = int(cmd.getAbleToRun());
 
     if (isRunnable) {
         double kXX = cmd.getKXX();
@@ -33,13 +46,18 @@ int main(int argc, char const *argv[]) {
         CMaterial mat = CMaterial(kXX, kXY, kYY);
         CGeometry geo = CGeometry(a, h1, h2, L, th);
         CMesh msh = CMesh(Nx, Ny, geo);
-        CConductance con = CConductance(geo, mat, msh);
-        CBoundaryConditions bnd = CBoundaryConditions(flLoc, flVal,
-                                                      tpLoc, tpVal, msh, geo);
-        CHeatConduction heat = CHeatConduction(bnd, con, msh);
 
-        writeVTK("disp.vtk", msh, heat);
+        CConductance con = CConductance(geo, mat, msh);
+        if (rank == 0) {
+            CBoundaryConditions bnd = CBoundaryConditions(flLoc, flVal,
+                                                          tpLoc, tpVal, msh, geo);
+            CHeatConduction heat = CHeatConduction(bnd, con, msh);
+
+            writeVTK("disp.vtk", msh, heat);
+        }
     }
+
+    MPI_Finalize();
 
     return 0;
 }

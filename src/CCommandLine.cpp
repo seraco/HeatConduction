@@ -5,11 +5,17 @@
 #include <fstream>
 #include <string>
 #include <boost/program_options.hpp>
+#include <mpi.h>
 
 #include "../include/CCommandLine.h"
 
-CCommandLine::CCommandLine(int argc, char const *argv[]) {
-    std::cout << R"(
+CCommandLine::CCommandLine(int argc, char *argv[]) {
+    int rank;
+    int nRanks;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nRanks);
+    if (rank == 0) {
+        std::cout << R"(
              _       _    _            _                 _
             / /\    / /\ /\ \         / /\              /\ \         _          _
            / / /   / / //  \ \       / /  \             \_\ \       /\ \       /\ \
@@ -22,9 +28,9 @@ CCommandLine::CCommandLine(int argc, char const *argv[]) {
     / / /   / / // / /_______\/ / /_       __\ \_\/_/ /
     \/_/    \/_/ \/__________/\_\___\     /____/_/\_\/
 
-    )" << "\n";
-    std::cout << "Version 0.0.1\n\n";
-    std::cout << "\nStarting solver...\n\n";
+        )" << "\n";
+        std::cout << "Version 0.0.1\n\n";
+    }
     namespace po = boost::program_options;
     po::options_description desc("Program options");
     desc.add_options()
@@ -47,7 +53,7 @@ CCommandLine::CCommandLine(int argc, char const *argv[]) {
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
     if (vm.count("help")) {
-        std::cout << desc;
+        if (rank == 0) std::cout << desc;
         ableToRun = false;
     } else if (
         vm.count("a-constant") &&
@@ -81,8 +87,10 @@ CCommandLine::CCommandLine(int argc, char const *argv[]) {
         tempValue = vm["temp-value"].as<double>();
         ableToRun = true;
     } else {
-        std::cout << "All the command line arguments should be specified\n\n";
-        std::cout << desc;
+        if (rank == 0) {
+            std::cout << "All the command line arguments should be specified\n\n";
+            std::cout << desc;
+        }
         ableToRun = false;
     }
 }

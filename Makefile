@@ -19,7 +19,9 @@ TEST_BIN = $(wildcard $(TEST_BIN_DIR)/*.out)
 LIB = -llapack -lblas -lboost_program_options
 TEST_LIB = $(wildcard $(TEST_LIB_DIR)/*.a)
 
-CXX = g++
+# CXX = g++
+CXX = mpicxx
+RUN = mpirun -np 2
 CXXFLAGS += -std=c++11 -Wall -O2
 TEST_CXXFLAGS += -pthread
 INC = -Iinclude
@@ -48,7 +50,7 @@ debug: $(TEST_EXE)
 c1:
 	$(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 		   --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
-		   --n-x 10 --n-y 5 \
+		   --n-x 100 --n-y 50 \
 		   --flux-location right --flux-value 2500.0 \
 		   --temp-location left --temp-value 10.0
 
@@ -67,6 +69,30 @@ c3:
 		   --n-x 15 --n-y 8 \
 		   --flux-location bottom --flux-value -5000.0 \
 		   --temp-location left --temp-value -20.0
+
+.PHONY: c1p
+c1p:
+	$(RUN) $(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
+		          --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
+		          --n-x 100 --n-y 50 \
+		          --flux-location right --flux-value 2500.0 \
+		          --temp-location left --temp-value 10.0
+
+.PHONY: c2p
+c2p:
+	$(RUN) $(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
+		          --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
+		          --n-x 10 --n-y 5 \
+		          --flux-location top --flux-value 2500.0 \
+		          --temp-location bottom --temp-value 10.0
+
+.PHONY: c3p
+c3p:
+	$(RUN) $(BIN) -A 0.25 --left-height 1.0 --right-height 1.3 -L 3.0 -T 0.2 \
+		          --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
+		          --n-x 15 --n-y 8 \
+		          --flux-location bottom --flux-value -5000.0 \
+		          --temp-location left --temp-value -20.0
 
 .PHONY: clean
 clean:
