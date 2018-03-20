@@ -44,6 +44,8 @@ class CLinearSystem {
         CMatrix lhsMatrix;
         CMatrix rhsVector;
 
+        static double parallelDot(double* x, double* y, unsigned n);
+
     public:
         CLinearSystem(const CMatrix& A, const CMatrix& b);
         virtual ~CLinearSystem();

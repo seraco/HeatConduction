@@ -2,6 +2,7 @@
 #define __CLINEARSYSTEM_CPP
 
 #include <iostream>
+#include <mpi.h>
 
 #include "../include/CMatrix.h"
 #include "../include/CLinearSystem.h"
@@ -65,7 +66,7 @@ CMatrix CLinearSystem::iterativeSolve() {
 
     CMatrix A = lhsMatrix;
     CMatrix b = rhsVector;
-    CMatrix x = CMatrix(n, 1, 0.0);
+    CMatrix x = rhsVector;
     double* APtr = A.getMtxAddress();
     double* bPtr = b.getMtxAddress();
     double* xPtr = x.getMtxAddress();
@@ -76,9 +77,9 @@ CMatrix CLinearSystem::iterativeSolve() {
     k = 0;
     do {
         F77NAME(dgemv)('N', n, n, 1.0, APtr, n, p, 1, 0.0, t, 1);
-        alpha = F77NAME(ddot)(n, t, 1, p, 1);
-        alpha = F77NAME(ddot)(n, r, 1, r, 1) / alpha;
-        beta  = F77NAME(ddot)(n, r, 1, r, 1);
+        alpha = parallelDot(t, p, n);
+        alpha = parallelDot(r, r, n) / alpha;
+        beta = parallelDot(r, r, n);
 
         F77NAME(daxpy)(n, alpha, p, 1, xPtr, 1);
         F77NAME(daxpy)(n, -alpha, t, 1, r, 1);
@@ -87,7 +88,7 @@ CMatrix CLinearSystem::iterativeSolve() {
         if (eps < tol*tol) {
             break;
         }
-        beta = F77NAME(ddot)(n, r, 1, r, 1) / beta;
+        beta = parallelDot(r, r, n) / beta;
 
         F77NAME(dcopy)(n, r, 1, t, 1);
         F77NAME(daxpy)(n, beta, p, 1, t, 1);
@@ -102,5 +103,36 @@ CMatrix CLinearSystem::iterativeSolve() {
 
     return x;
 }
+
+double CLinearSystem::parallelDot(double* x, double* y, unsigned n) {
+    double dot = 0.0, res = 0.0;
+    unsigned size;
+    int rank;
+    int nRanks;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nRanks);
+    double* xInit = x;
+    double* yInit = y;
+
+    if (rank == 0) {
+        size = n / nRanks;
+        dot = F77NAME(ddot)(size, xInit, 1, yInit, 1);
+    } else {
+        size = n / nRanks + n % nRanks;
+        xInit += n / nRanks;
+        yInit += n / nRanks;
+        dot = F77NAME(ddot)(size, xInit, 1, yInit, 1);
+    }
+
+    MPI_Allreduce(&dot, &res, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+    return res;
+}
+
+// void CLinearSystem::parallelMul(double* A, double* x, double* y, unsigned n) {
+//     for (unsigned i = 0; i < n; i++) {
+//         y[i] = parallelDot(A[i*n], x, n);
+//     }
+// }
 
 #endif

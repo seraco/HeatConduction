@@ -54,7 +54,7 @@ debug: $(TEST_EXE)
 c1:
 	$(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 		   --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
-		   --n-x 10 --n-y 5 \
+		   --n-x 100 --n-y 50 \
 		   --flux-location right --flux-value 2500.0 \
 		   --temp-location left --temp-value 10.0
 
@@ -78,7 +78,7 @@ c3:
 c1p:
 	$(RUN) $(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 		          --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
-		          --n-x 10 --n-y 5 \
+		          --n-x 100 --n-y 50 \
 		          --flux-location right --flux-value 2500.0 \
 		          --temp-location left --temp-value 10.0
 
