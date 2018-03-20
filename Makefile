@@ -27,7 +27,11 @@ TEST_CXXFLAGS += -pthread
 INC = -Iinclude
 TEST_INC = -Itest/include
 
-all: $(EXE)
+default: compile
+
+all: compile
+
+compile: $(EXE)
 
 $(EXE): $(OBJ)
 	$(CXX) $^ -o $(BIN_DIR)/$@.out $(LIB)

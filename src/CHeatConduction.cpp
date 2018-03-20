@@ -101,7 +101,7 @@ CMatrix CHeatConduction::solveTemperature(const CMesh& msh,
 
     CMatrix RHS = Ff - Kef.transpose() * Te;
     CLinearSystem sys = CLinearSystem(Kff, RHS);
-    Tf = sys.solve();
+    Tf = sys.directSolve();
 
     for (unsigned i = 0; i < nTNod; i++) {
         T(tpNod(0, i), 0) = Te(i, 0);
