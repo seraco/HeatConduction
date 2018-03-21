@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "../include/CMatrix.h"
+#include "../include/CMatrix.hpp"
 
 CMatrix::CMatrix() {
     nRows = 0;

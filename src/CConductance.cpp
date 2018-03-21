@@ -5,10 +5,10 @@
 #include <cmath>
 #include <mpi.h>
 
-#include "../include/CConductance.h"
-#include "../include/CMaterial.h"
-#include "../include/CMesh.h"
-#include "../include/CGeometry.h"
+#include "../include/CConductance.hpp"
+#include "../include/CMaterial.hpp"
+#include "../include/CMesh.hpp"
+#include "../include/CGeometry.hpp"
 
 CConductance::CConductance() {
     gaussOrder = 2;

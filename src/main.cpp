@@ -2,14 +2,14 @@
 #include <string>
 #include <mpi.h>
 
-#include "../include/CCommandLine.h"
-#include "../include/CMaterial.h"
-#include "../include/CGeometry.h"
-#include "../include/CMesh.h"
-#include "../include/CConductance.h"
-#include "../include/CBoundaryConditions.h"
-#include "../include/CHeatConduction.h"
-#include "../include/WriteVTK.h"
+#include "../include/CCommandLine.hpp"
+#include "../include/CMaterial.hpp"
+#include "../include/CGeometry.hpp"
+#include "../include/CMesh.hpp"
+#include "../include/CConductance.hpp"
+#include "../include/CBoundaryConditions.hpp"
+#include "../include/CHeatConduction.hpp"
+#include "../include/WriteVTK.hpp"
 
 int main(int argc, char *argv[]) {
     if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {

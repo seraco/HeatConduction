@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "CMatrix.h"
-#include "CMesh.h"
-#include "CHeatConduction.h"
+#include "CMatrix.hpp"
+#include "CMesh.hpp"
+#include "CHeatConduction.hpp"
 
 void writeVTK(std::string fname, const CMesh& msh, const CHeatConduction& heat);
 template <typename T> void swapEnd(T& var);

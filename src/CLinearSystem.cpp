@@ -4,8 +4,8 @@
 #include <iostream>
 #include <mpi.h>
 
-#include "../include/CMatrix.h"
-#include "../include/CLinearSystem.h"
+#include "../include/CMatrix.hpp"
+#include "../include/CLinearSystem.hpp"
 
 CLinearSystem::CLinearSystem(const CMatrix& A, const CMatrix& b) {
     lhsMatrix = CMatrix(A);

@@ -1,8 +1,8 @@
 #ifndef __CMATRIX_CPP
 #define __CMATRIX_CPP
 
-#include "../include/CMatrix.h"
-#include "../include/CMaterial.h"
+#include "../include/CMatrix.hpp"
+#include "../include/CMaterial.hpp"
 
 CMaterial::CMaterial() {
     conducXX = 0.0;

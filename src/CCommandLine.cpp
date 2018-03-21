@@ -7,7 +7,7 @@
 #include <boost/program_options.hpp>
 #include <mpi.h>
 
-#include "../include/CCommandLine.h"
+#include "../include/CCommandLine.hpp"
 
 CCommandLine::CCommandLine(int argc, char *argv[]) {
     int rank;

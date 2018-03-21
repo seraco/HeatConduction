@@ -1,7 +1,7 @@
 #ifndef __CMATERIAL_H
 #define __CMATERIAL_H
 
-#include "CMatrix.h"
+#include "CMatrix.hpp"
 
 class CMaterial {
     private:

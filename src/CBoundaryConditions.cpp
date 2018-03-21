@@ -5,9 +5,9 @@
 #include <iostream>
 #include <cmath>
 
-#include "../include/CBoundaryConditions.h"
-#include "../include/CMesh.h"
-#include "../include/CGeometry.h"
+#include "../include/CBoundaryConditions.hpp"
+#include "../include/CMesh.hpp"
+#include "../include/CGeometry.hpp"
 
 CBoundaryConditions::CBoundaryConditions() {
     gaussOrder = 2;

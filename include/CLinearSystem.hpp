@@ -1,7 +1,7 @@
 #ifndef __CLINEARSYSTEM_H
 #define __CLINEARSYSTEM_H
 
-#include "CMatrix.h"
+#include "CMatrix.hpp"
 
 #define F77NAME(x) x##_
 extern "C" {

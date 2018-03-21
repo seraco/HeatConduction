@@ -1,7 +1,7 @@
 #ifndef __CGEOMETRY_CPP
 #define __CGEOMETRY_CPP
 
-#include "../include/CGeometry.h"
+#include "../include/CGeometry.hpp"
 
 CGeometry::CGeometry() {
     aConst = 0.0;

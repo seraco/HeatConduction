@@ -1,11 +1,11 @@
 #ifndef __CHEATCONDUCTION_CPP
 #define __CHEATCONDUCTION_CPP
 
-#include "../include/CHeatConduction.h"
-#include "../include/CBoundaryConditions.h"
-#include "../include/CConductance.h"
-#include "../include/CMesh.h"
-#include "../include/CLinearSystem.h"
+#include "../include/CHeatConduction.hpp"
+#include "../include/CBoundaryConditions.hpp"
+#include "../include/CConductance.hpp"
+#include "../include/CMesh.hpp"
+#include "../include/CLinearSystem.hpp"
 
 CHeatConduction::CHeatConduction() {}
 

@@ -1,8 +1,8 @@
 #ifndef __CMESH_H
 #define __CMESH_H
 
-#include "CMatrix.h"
-#include "CGeometry.h"
+#include "CMatrix.hpp"
+#include "CGeometry.hpp"
 
 class CMesh {
     private:

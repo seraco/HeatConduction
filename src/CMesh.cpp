@@ -1,9 +1,9 @@
 #ifndef __CMESH_CPP
 #define __CMESH_CPP
 
-#include "../include/CMatrix.h"
-#include "../include/CGeometry.h"
-#include "../include/CMesh.h"
+#include "../include/CMatrix.hpp"
+#include "../include/CGeometry.hpp"
+#include "../include/CMesh.hpp"
 
 CMesh::CMesh() {
     nXDirElem = 0;

@@ -5,10 +5,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "../include/WriteVTK.h"
-#include "../include/CMesh.h"
-#include "../include/CMatrix.h"
-#include "../include/CHeatConduction.h"
+#include "../include/WriteVTK.hpp"
+#include "../include/CMesh.hpp"
+#include "../include/CMatrix.hpp"
+#include "../include/CHeatConduction.hpp"
 
 // TODO: Write in binary format!!
 void writeVTK(std::string fname, const CMesh& msh, const CHeatConduction& heat) {

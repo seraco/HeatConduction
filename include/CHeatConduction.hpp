@@ -1,10 +1,10 @@
 #ifndef __CHEATCONDUCTION_H
 #define __CHEATCONDUCTION_H
 
-#include "CConductance.h"
-#include "CBoundaryConditions.h"
-#include "CMatrix.h"
-#include "CMesh.h"
+#include "CConductance.hpp"
+#include "CBoundaryConditions.hpp"
+#include "CMatrix.hpp"
+#include "CMesh.hpp"
 
 class CHeatConduction {
     private:

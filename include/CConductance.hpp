@@ -1,10 +1,10 @@
 #ifndef __CCONDUCTANCE_H
 #define __CCONDUCTANCE_H
 
-#include "CMatrix.h"
-#include "CMaterial.h"
-#include "CMesh.h"
-#include "CGeometry.h"
+#include "CMatrix.hpp"
+#include "CMaterial.hpp"
+#include "CMesh.hpp"
+#include "CGeometry.hpp"
 
 class CConductance {
     private:
