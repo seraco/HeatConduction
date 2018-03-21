@@ -1,3 +1,30 @@
+/*!
+ * @file CConductance.cpp
+ * @brief The main subroutines for assemblying the conductance matrix.
+ * @author S.Ramon (seraco)
+ * @version 0.0.1
+ *
+ * Copyright 2018 S.Ramon
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #ifndef __CCONDUCTANCE_CPP
 #define __CCONDUCTANCE_CPP
 
@@ -11,6 +38,7 @@
 #include "../include/CGeometry.hpp"
 
 CConductance::CConductance() {
+    /*--- Initialize properties. ---*/
     gaussOrder = 2;
     gaussPoints = CMatrix(1, 2, 0.0);
     gaussPoints(0, 0) = -1.0 / sqrt(3.0);
@@ -20,12 +48,14 @@ CConductance::CConductance() {
 
 CConductance::CConductance(const CGeometry& geo, const CMaterial& mat,
                            const CMesh& msh) {
+    /*--- Initialize properties. ---*/
     gaussOrder = 2;
     gaussPoints = CMatrix(1, 2, 0.0);
     gaussPoints(0, 0) = -1.0 / sqrt(3.0);
     gaussPoints(0, 1) = 1.0 / sqrt(3.0);
     gaussWeights = CMatrix(1, 2, 1.0);
 
+    /*--- Calculate conductance matrix. ---*/
     conducMtx = conductanceMtx(geo, mat, msh);
 }
 
@@ -49,6 +79,7 @@ CMatrix CConductance::getConducMtx() const {
 
 CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
                                      const CMesh& msh) {
+    /*--- Initialize variables to be used in the subroutine. ---*/
     double thick = geo.getThickness();
     unsigned nDof = msh.getNDofTotal();
     unsigned nEl = msh.getNElem();
@@ -76,12 +107,15 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
     MPI_Comm_size(MPI_COMM_WORLD, &nRanks);
     // printf("Hello: rank %d, world: %d\n",rank, nRanks);
 
+    /*--- Divide elements to be handled by ranks 0 and 1. ---*/
     unsigned initEl = rank * (nEl / nRanks);
     unsigned finaEl = (rank + 1) * (nEl / nRanks);
     if (rank == 1 && nEl % 2 != 0) finaEl++;
 
     // std::cout << initEl << finaEl << nEl << std::endl;
 
+    /*--- Computation of elemental conductance matrix and assembly of global
+          matrix. ---*/
     for (unsigned e = initEl; e < finaEl; e++) {
         eNodes(0, 0) = conn(e, 1);
         eNodes(0, 1) = conn(e, 2);
@@ -102,6 +136,7 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
             gDf(0, j) = glDof(eNodes(0, j), dfPerNod);
         }
 
+        /*--- Elemental conductance with Gaussian quadrature. ---*/
         CMatrix Ke = CMatrix(nNodPerEl, nNodPerEl, 0.0);
         for (unsigned i = 0; i < gaussOrder; i++) {
             for (unsigned j = 0; j < gaussOrder; j++) {
@@ -133,6 +168,7 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
             }
         }
 
+        /*--- Assembly of global conductance. ---*/
         for (unsigned i = 0; i < nNodPerEl; i++) {
             for (unsigned j = 0; j < nNodPerEl; j++) {
                 int iDof, jDof;
@@ -144,6 +180,8 @@ CMatrix CConductance::conductanceMtx(const CGeometry& geo, const CMaterial& mat,
     }
 
     // TODO: Improve communication to be faster!
+    /*--- Combine calculations from ranks 0 and 1 to obtain the final
+          conductance matrix. ---*/
     if (nRanks > 1) {
         if (rank == 0) {
             CMatrix Krec = CMatrix(nDof, nDof, 0.0);
