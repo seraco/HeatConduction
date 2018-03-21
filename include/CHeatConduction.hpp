@@ -1,5 +1,5 @@
-#ifndef __CHEATCONDUCTION_H
-#define __CHEATCONDUCTION_H
+#ifndef __CHEATCONDUCTION_HPP
+#define __CHEATCONDUCTION_HPP
 
 #include "CConductance.hpp"
 #include "CBoundaryConditions.hpp"

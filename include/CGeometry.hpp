@@ -1,5 +1,5 @@
-#ifndef __CGEOMETRY_H
-#define __CGEOMETRY_H
+#ifndef __CGEOMETRY_HPP
+#define __CGEOMETRY_HPP
 
 class CGeometry {
     private:

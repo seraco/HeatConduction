@@ -1,5 +1,5 @@
-#ifndef __CMATRIX_H
-#define __CMATRIX_H
+#ifndef __CMATRIX_HPP
+#define __CMATRIX_HPP
 
 #define F77NAME(x) x##_
 extern "C" {

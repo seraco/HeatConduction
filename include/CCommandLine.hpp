@@ -1,5 +1,5 @@
-#ifndef __CCOMMANDLINE_H
-#define __CCOMMANDLINE_H
+#ifndef __CCOMMANDLINE_HPP
+#define __CCOMMANDLINE_HPP
 
 #include <string>
 

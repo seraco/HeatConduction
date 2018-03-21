@@ -1,5 +1,5 @@
-#ifndef __CMATERIAL_H
-#define __CMATERIAL_H
+#ifndef __CMATERIAL_HPP
+#define __CMATERIAL_HPP
 
 #include "CMatrix.hpp"
 

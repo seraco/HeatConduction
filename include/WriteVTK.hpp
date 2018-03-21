@@ -1,5 +1,5 @@
-#ifndef __CWRITEVTK_H
-#define __CWRITEVTK_H
+#ifndef __CWRITEVTK_HPP
+#define __CWRITEVTK_HPP
 
 #include <string>
 

@@ -1,5 +1,5 @@
-#ifndef __CCONDUCTANCE_H
-#define __CCONDUCTANCE_H
+#ifndef __CCONDUCTANCE_HPP
+#define __CCONDUCTANCE_HPP
 
 #include "CMatrix.hpp"
 #include "CMaterial.hpp"

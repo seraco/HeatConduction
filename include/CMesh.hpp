@@ -1,5 +1,5 @@
-#ifndef __CMESH_H
-#define __CMESH_H
+#ifndef __CMESH_HPP
+#define __CMESH_HPP
 
 #include "CMatrix.hpp"
 #include "CGeometry.hpp"

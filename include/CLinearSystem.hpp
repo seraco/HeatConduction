@@ -1,5 +1,5 @@
-#ifndef __CLINEARSYSTEM_H
-#define __CLINEARSYSTEM_H
+#ifndef __CLINEARSYSTEM_HPP
+#define __CLINEARSYSTEM_HPP
 
 #include "CMatrix.hpp"
 
