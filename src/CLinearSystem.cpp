@@ -1,3 +1,30 @@
+/*!
+ * @file CLinearSystem.cpp
+ * @brief The main subroutines for solving linear systems of equations.
+ * @author S.Ramon (seraco)
+ * @version 0.0.1
+ *
+ * Copyright 2018 S.Ramon
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #ifndef __CLINEARSYSTEM_CPP
 #define __CLINEARSYSTEM_CPP
 
@@ -8,8 +35,11 @@
 #include "../include/CLinearSystem.hpp"
 
 CLinearSystem::CLinearSystem(const CMatrix& A, const CMatrix& b) {
+    /*--- Initialize properties. ---*/
     lhsMatrix = CMatrix(A);
     rhsVector = CMatrix(b);
+
+    /*--- Check if the system is valid. ---*/
     if(!isSystemValid())
         throw std::runtime_error("LHS matrix and RHS vector incompatible");
 }
@@ -34,26 +64,27 @@ bool CLinearSystem::isSystemValid() {
 }
 
 CMatrix CLinearSystem::directSolve() {
+    /*--- Initialize variables to be used in the subroutine. ---*/
     const unsigned size = lhsMatrix.getRows();
     const unsigned nRhs = 1;
     int info = 0;
     CMatrix A = lhsMatrix;
     CMatrix b = rhsVector;
     int* vPivPtr = new int[size];
-    // A.printMtx();
-    // b.printMtx();
-    // vPiv.printMtx();
     double* APtr = A.getMtxAddress();
     double* bPtr = b.getMtxAddress();
-    // std::cout << *(bPtr+3) << std::endl;
-    // std::cout << *(vPivPtr+3) << std::endl;
+
+    /*--- Solve system with LAPACK subroutine. ---*/
     F77NAME(dgesv)(size, nRhs, APtr, size, vPivPtr, bPtr, size, info);
-    // std::cout << info << std::endl;
+
+    /*--- Release allocated memory. ---*/
     delete[] vPivPtr;
+
     return b;
 }
 
 CMatrix CLinearSystem::iterativeSolve() {
+    /*--- Initialize variables to be used in the subroutine. ---*/
     const unsigned n = lhsMatrix.getRows();
     double* r = new double[n];
     double* p = new double[n];
@@ -63,7 +94,6 @@ CMatrix CLinearSystem::iterativeSolve() {
     double beta;
     double eps;
     double tol = 0.00001;
-
     CMatrix A = lhsMatrix;
     CMatrix b = rhsVector;
     CMatrix x = rhsVector;
@@ -71,6 +101,7 @@ CMatrix CLinearSystem::iterativeSolve() {
     double* bPtr = b.getMtxAddress();
     double* xPtr = x.getMtxAddress();
 
+    /*--- CG method algorithm. ---*/
     F77NAME(dcopy)(n, bPtr, 1, r, 1);
     F77NAME(dgemv)('N', n, n, -1.0, APtr, n, xPtr, 1, 1.0, r, 1);
     F77NAME(dcopy)(n, r, 1, p, 1);
@@ -97,6 +128,7 @@ CMatrix CLinearSystem::iterativeSolve() {
         k++;
     } while (k < 5000);
 
+    /*--- Release allocated memory. ---*/
     delete[] r;
     delete[] p;
     delete[] t;
@@ -105,6 +137,7 @@ CMatrix CLinearSystem::iterativeSolve() {
 }
 
 double CLinearSystem::parallelDot(double* x, double* y, unsigned n) {
+    /*--- Initialize variables to be used in the subroutine. ---*/
     double dot = 0.0, res = 0.0;
     unsigned size;
     int rank;
@@ -114,6 +147,7 @@ double CLinearSystem::parallelDot(double* x, double* y, unsigned n) {
     double* xInit = x;
     double* yInit = y;
 
+    /*--- Divide dot product between ranks 0 and 1. ---*/
     if (rank == 0) {
         size = n / nRanks;
         dot = F77NAME(ddot)(size, xInit, 1, yInit, 1);
@@ -124,6 +158,7 @@ double CLinearSystem::parallelDot(double* x, double* y, unsigned n) {
         dot = F77NAME(ddot)(size, xInit, 1, yInit, 1);
     }
 
+    /*--- Combine the results from ranks 0 and 1. ---*/
     MPI_Allreduce(&dot, &res, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     return res;
