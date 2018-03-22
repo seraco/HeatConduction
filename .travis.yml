@@ -29,4 +29,4 @@ before_script:
     - cd test/bin
 
 script:
-    - TestHeat++.out
+    - ./TestHeat++.out
