@@ -4,6 +4,7 @@ language:
     - cpp
 
 install:
+    - echo $HOME
     - echo $TRAVIS_BUILD_DIR
     - make test
 
