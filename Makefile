@@ -47,6 +47,14 @@ $(TEST_EXE): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
 $(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(TEST_CXXFLAGS) $(TEST_INC) $(INC) -c $< -o $@
 
+travis: $(TEST_EXE)
+
+$(TEST_EXE): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
+	$(CXX) $^ -o $(TEST_BIN_DIR)/$@.out -lgtest $(LIB)
+
+$(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $(TEST_CXXFLAGS) $(INC) -c $< -o $@
+
 debug: CXXFLAGS += -DDEBUG -g
 debug: $(TEST_EXE)
 

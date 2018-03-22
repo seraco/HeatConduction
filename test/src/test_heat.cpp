@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "../include/gtest/gtest.h"
+#include "gtest/gtest.h"
 #include "../../include/CHeatConduction.hpp"
 
 namespace {

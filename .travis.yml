@@ -7,15 +7,22 @@ before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq build-essential libopenmpi-dev libboost-all-dev
     - sudo apt-get install -qq libblas-dev liblapack-dev
+    - sudo apt-get install -qq libgtest-dev
+    - sudo apt-get install cmake
+    - cd /usr/src/gtest
+    - sudo cmake CMakeLists.txt
+    - sudo make
+    - sudo cp *.a /usr/lib
 
 install:
     - echo $HOME
     - echo $TRAVIS_BUILD_DIR
+    - pwd
     - mkdir -p obj
     - mkdir -p bin
     - mkdir -p test/obj
     - mkdir -p test/bin
-    - make test
+    - make travis
 
 before_script:
     - cd test/bin

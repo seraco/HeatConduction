@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../include/gtest/gtest.h"
+#include "gtest/gtest.h"
 #include "../../include/CMatrix.hpp"
 
 namespace {
