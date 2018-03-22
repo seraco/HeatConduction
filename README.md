@@ -53,6 +53,9 @@ Heat++.out -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
            --temp-location bottom --temp-value 10.0
 ```
 
+The solver can also be run with `make c1`, `make c2` and `make c3`, which run
+the code for three test cases.
+
 The solution is printed in the file `disp.vtk`. This file can then be plotted.
 
 ## License
