@@ -33,5 +33,3 @@
 
 .DS_Store
 *.vtk
-
-!libgtest.a
