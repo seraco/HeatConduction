@@ -11,6 +11,7 @@
 #include "../include/CBoundaryConditions.hpp"
 #include "../include/CHeatConduction.hpp"
 #include "../include/WriteVTK.hpp"
+#include "../include/Analytical.hpp"
 
 int main(int argc, char *argv[]) {
     if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {
@@ -49,6 +50,8 @@ int main(int argc, char *argv[]) {
         CBoundaryConditions bnd = CBoundaryConditions(flLoc, flVal,
                                                       tpLoc, tpVal, msh, geo);
         CHeatConduction heat = CHeatConduction(bnd, con, msh);
+
+        solveAnalytical(msh, bnd, mat, heat.getTemp());
 
         if (rank == 0) writeVTK("disp.vtk", msh, heat);
     }

@@ -1,5 +1,6 @@
 EXE = Heat++
-TEST_EXE = TestHeat++
+TEST_EXE = TestLocalHeat++
+TEST_EXE_TRAV = TestHeat++
 
 SRC_DIR = src
 TEST_SRC_DIR = test/src
@@ -47,9 +48,9 @@ $(TEST_EXE): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
 $(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(TEST_CXXFLAGS) $(TEST_INC) $(INC) -c $< -o $@
 
-travis: $(TEST_EXE)
+travis: $(TEST_EXE_TRAV)
 
-$(TEST_EXE): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
+$(TEST_EXE_TRAV): $(TEST_OBJ) $(OBJ_WITHOUT_MAIN)
 	$(CXX) $^ -o $(TEST_BIN_DIR)/$@.out -lgtest $(LIB)
 
 $(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp
@@ -62,7 +63,7 @@ debug: $(TEST_EXE)
 c1:
 	$(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 		   --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
-		   --n-x 100 --n-y 50 \
+		   --n-x 10 --n-y 5 \
 		   --flux-location right --flux-value 2500.0 \
 		   --temp-location left --temp-value 10.0
 
@@ -86,7 +87,7 @@ c3:
 c1p:
 	$(RUN) $(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 		          --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
-		          --n-x 100 --n-y 50 \
+		          --n-x 10 --n-y 5 \
 		          --flux-location right --flux-value 2500.0 \
 		          --temp-location left --temp-value 10.0
 

@@ -28,11 +28,15 @@
 #ifndef __CHEATCONDUCTION_CPP
 #define __CHEATCONDUCTION_CPP
 
+#include <string>
+#include <iostream>
+
 #include "../include/CHeatConduction.hpp"
 #include "../include/CBoundaryConditions.hpp"
 #include "../include/CConductance.hpp"
 #include "../include/CMesh.hpp"
 #include "../include/CLinearSystem.hpp"
+#include "../include/CMaterial.hpp"
 
 CHeatConduction::CHeatConduction() {}
 

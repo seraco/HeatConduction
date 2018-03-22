@@ -33,6 +33,7 @@
 #include "CBoundaryConditions.hpp"
 #include "CMatrix.hpp"
 #include "CMesh.hpp"
+#include "CMaterial.hpp"
 
 /*!
  * @class CHeatConduction
