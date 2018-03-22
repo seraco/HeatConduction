@@ -2,6 +2,9 @@
   Heat++ (ver. 0.0.1): FEM heat conduction solver
 -----------------------------------------------------------
 
+[![Build Status](https://travis-ci.org/seraco/HeatConduction.svg?branch=master)]
+(https://travis-ci.org/seraco/HeatConduction)
+
 Finite element method solver for heat conduction problems on flat plates with
 the following geometry:
 
