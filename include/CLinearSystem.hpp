@@ -30,6 +30,7 @@
 #define __CLINEARSYSTEM_HPP
 
 #include "CMatrix.hpp"
+#include "CMatrixSymmetric.hpp"
 
 #define F77NAME(x) x##_
 extern "C" {
@@ -44,6 +45,13 @@ extern "C" {
     void F77NAME(dgemv) (const char& trans,
                          const int& nrowsa,
                          const int& ncolsa,
+                         const double& alpha,
+                         const double* A, const int& lda,
+                         const double* x, const int& incx,
+                         const double& beta,
+                         double* y, const int& incy);
+    void F77NAME(dsymv) (const char& trans,
+                         const int& nrowsa,
                          const double& alpha,
                          const double* A, const int& lda,
                          const double* x, const int& incx,
@@ -64,8 +72,9 @@ extern "C" {
  */
 class CLinearSystem {
     private:
-        CMatrix lhsMatrix;  /*!< @brief A matrix of the system.*/
-        CMatrix rhsVector;  /*!< @brief b vector of the system.*/
+        CMatrix lhsMatrix;              /*!< @brief A matrix of the system.*/
+        CMatrixSymmetric lhsSymMatrix;  /*!< @brief A symmetric matrix of the system.*/
+        CMatrix rhsVector;              /*!< @brief b vector of the system.*/
 
         /*!
          * @brief Subroutine to know if the system is valid to solve.
@@ -88,6 +97,13 @@ class CLinearSystem {
          * @param[in] b - RHS vector.
          */
         CLinearSystem(const CMatrix& A, const CMatrix& b);
+
+        /*!
+         * @brief Constructor of the class.
+         * @param[in] A - Symmetric LHS matrix of coefficients.
+         * @param[in] b - RHS vector.
+         */
+        CLinearSystem(const CMatrixSymmetric& A, const CMatrix& b);
 
         /*!
          * @brief Destructor of the class.
@@ -117,6 +133,12 @@ class CLinearSystem {
          * @return Vector of unknowns.
          */
         CMatrix iterativeSolve();
+
+        /*!
+         * @brief Iterative solution of the system with CG method for A symmetric.
+         * @return Vector of unknowns.
+         */
+        CMatrix iterativeSymmetricSolve();
 };
 
 #endif

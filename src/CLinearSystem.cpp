@@ -45,6 +45,12 @@ CLinearSystem::CLinearSystem(const CMatrix& A, const CMatrix& b) {
         throw std::runtime_error("LHS matrix and RHS vector incompatible");
 }
 
+CLinearSystem::CLinearSystem(const CMatrixSymmetric& A, const CMatrix& b) {
+    /*--- Initialize properties. ---*/
+    lhsSymMatrix = CMatrixSymmetric(A);
+    rhsVector = CMatrix(b);
+}
+
 CLinearSystem::~CLinearSystem() {}
 
 CMatrix CLinearSystem::getLhsMatrix() {
@@ -109,6 +115,59 @@ CMatrix CLinearSystem::iterativeSolve() {
     k = 0;
     do {
         F77NAME(dgemv)('N', n, n, 1.0, APtr, n, p, 1, 0.0, t, 1);
+        alpha = parallelDot(t, p, n);
+        alpha = parallelDot(r, r, n) / alpha;
+        beta = parallelDot(r, r, n);
+
+        F77NAME(daxpy)(n, alpha, p, 1, xPtr, 1);
+        F77NAME(daxpy)(n, -alpha, t, 1, r, 1);
+
+        eps = F77NAME(dnrm2)(n, r, 1);
+        if (eps < tol*tol) {
+            break;
+        }
+        beta = parallelDot(r, r, n) / beta;
+
+        F77NAME(dcopy)(n, r, 1, t, 1);
+        F77NAME(daxpy)(n, beta, p, 1, t, 1);
+        F77NAME(dcopy)(n, t, 1, p, 1);
+
+        k++;
+    } while (k < 5000);
+
+    /*--- Release allocated memory. ---*/
+    delete[] r;
+    delete[] p;
+    delete[] t;
+
+    return x;
+}
+
+CMatrix CLinearSystem::iterativeSymmetricSolve() {
+    /*--- Initialize variables to be used in the subroutine. ---*/
+    const unsigned n = lhsMatrix.getRows();
+    double* r = new double[n];
+    double* p = new double[n];
+    double* t = new double[n];
+    int k;
+    double alpha;
+    double beta;
+    double eps;
+    double tol = 0.00001;
+    CMatrix A = lhsMatrix;
+    CMatrix b = rhsVector;
+    CMatrix x = rhsVector;
+    double* APtr = A.getMtxAddress();
+    double* bPtr = b.getMtxAddress();
+    double* xPtr = x.getMtxAddress();
+
+    /*--- CG method algorithm. ---*/
+    F77NAME(dcopy)(n, bPtr, 1, r, 1);
+    F77NAME(dsymv)('L', n, -1.0, APtr, n, xPtr, 1, 1.0, r, 1);
+    F77NAME(dcopy)(n, r, 1, p, 1);
+    k = 0;
+    do {
+        F77NAME(dsymv)('L', n, 1.0, APtr, n, p, 1, 0.0, t, 1);
         alpha = parallelDot(t, p, n);
         alpha = parallelDot(r, r, n) / alpha;
         beta = parallelDot(r, r, n);

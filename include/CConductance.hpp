@@ -30,6 +30,7 @@
 #define __CCONDUCTANCE_HPP
 
 #include "CMatrix.hpp"
+#include "CMatrixSymmetric.hpp"
 #include "CMaterial.hpp"
 #include "CMesh.hpp"
 #include "CGeometry.hpp"
@@ -52,7 +53,8 @@ class CConductance {
          * @param[in] msh - Mesh.
          * @return Conductance matrix.
          */
-        CMatrix conductanceMtx(const CGeometry& geo, const CMaterial& mat,
+        CMatrix conductanceMtx(const CGeometry& geo,
+                               const CMaterial& mat,
                                const CMesh& msh);
 
     public:
