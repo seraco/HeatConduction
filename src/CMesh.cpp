@@ -1,3 +1,30 @@
+/*!
+ * @file CMesh.cpp
+ * @brief The main subroutines for defining matrices and their operations.
+ * @author S.Ramon (seraco)
+ * @version 0.0.1
+ *
+ * Copyright 2018 S.Ramon
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #ifndef __CMESH_CPP
 #define __CMESH_CPP
 
@@ -6,6 +33,7 @@
 #include "../include/CMesh.hpp"
 
 CMesh::CMesh() {
+    /*--- Initialize properties. ---*/
     nXDirElem = 0;
     nYDirElem = 0;
     nElem = 0;
@@ -16,6 +44,7 @@ CMesh::CMesh() {
 }
 
 CMesh::CMesh(const unsigned NElx, const unsigned NEly, const CGeometry geo) {
+    /*--- Initialize properties. ---*/
     nXDirElem = NElx;
     nYDirElem = NEly;
     nElem = nXDirElem * nYDirElem;
@@ -24,6 +53,7 @@ CMesh::CMesh(const unsigned NElx, const unsigned NEly, const CGeometry geo) {
     dofPerNode = 1;
     totalDofInElem = nNodePerElem * dofPerNode;
 
+    /*--- Compute main matrices of the mesh. ---*/
     coorMtx = coordinateMtx(geo);
     topolMtx = topologyMtx();
     connMtx = connectivityMtx(topolMtx);
@@ -81,15 +111,18 @@ CMatrix CMesh::getGlDofMtx() const {
 }
 
 CMatrix CMesh::coordinateMtx(CGeometry geo) {
+    /*--- Initialize variables to be used in the subroutine. ---*/
     CMatrix xVec, hVec, yMat, yLocVec, coorMat;
     double a = geo.getAConst();
     double b = geo.getBConst();
     double hLeft = geo.getHeightLeft();
     unsigned nod;
 
+    /*--- Build x coordinates and height distribution. ---*/
     xVec = CMatrix::linspace(0.0, geo.getLength(), nXDirElem + 1);
     hVec = (xVec^2)*a + xVec*b + hLeft;
 
+    /*--- Build y coordinates. ---*/
     yMat = CMatrix(nYDirElem + 1, nXDirElem + 1, 0.0);
     for (unsigned j = 0; j < nXDirElem + 1; j++) {
         yLocVec = CMatrix::linspace(-hVec(j, 0) / 2.0,
@@ -100,6 +133,7 @@ CMatrix CMesh::coordinateMtx(CGeometry geo) {
         }
     }
 
+    /*--- Build coordinate matrix from xVec and yMat. ---*/
     coorMat = CMatrix(nNode, 2, 0.0);
     nod = 0;
     for (unsigned j = 0; j < nXDirElem + 1; j++) {
@@ -116,6 +150,7 @@ CMatrix CMesh::coordinateMtx(CGeometry geo) {
 CMatrix CMesh::topologyMtx() {
     CMatrix topol = CMatrix(nYDirElem + 1, nXDirElem + 1, 0.0);
 
+    /*--- Node numbers increase from bottom to top and left to right. ---*/
     unsigned nod = 0;
     for (unsigned j = 0; j < nXDirElem + 1; j++) {
         for (unsigned i = 0; i < nYDirElem + 1; i++) {
@@ -130,6 +165,8 @@ CMatrix CMesh::topologyMtx() {
 CMatrix CMesh::connectivityMtx(CMatrix topol) {
     CMatrix conn = CMatrix(nElem, nNodePerElem + 1, 0.0);
 
+    /*--- First column is element number. The other columns are the nodes in the
+          element. ---*/
     unsigned elem = 0;
     for (unsigned j = 0; j < nXDirElem; j++) {
         for (unsigned i = 0; i < nYDirElem; i++) {
@@ -149,6 +186,7 @@ CMatrix CMesh::globalDofMtx(CMatrix conn) {
     CMatrix glDof = CMatrix(nNode, 2, 0.0);
     unsigned nod, elemNDof;
 
+    /*--- Populate first column of glDof with the number of DOF per node. ---*/
     for (unsigned i = 0; i < nElem; i++) {
         for (unsigned j = 0; j < nNodePerElem; j++) {
             nod = conn(i, j + 1);
@@ -156,6 +194,8 @@ CMatrix CMesh::globalDofMtx(CMatrix conn) {
         }
     }
 
+    /*--- Calculate the total number of DOF and populate the other columns of
+          glDof with the DOF numbers. ---*/
     nDofTotal = 0;
     for (unsigned i = 0; i < nNode; i++) {
         elemNDof = glDof(i, 0);
