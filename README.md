@@ -5,6 +5,7 @@
 Finite element method solver for heat conduction problems on flat plates with
 the following geometry:
 
+```
                       top h = 0.5 * (a*x*x + b*x + h1)
                       ________________________________
                      |                                |
@@ -15,3 +16,4 @@ the following geometry:
                      |                                |
                      |________________________________|
                     bottom h = -0.5 * (a*x*x + b*x + h1)
+```
