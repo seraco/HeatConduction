@@ -30,6 +30,7 @@
 
 #include <iostream>
 #include <mpi.h>
+#include <stdexcept>
 
 #include "../include/CMatrix.hpp"
 #include "../include/CLinearSystem.hpp"

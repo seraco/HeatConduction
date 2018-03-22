@@ -31,6 +31,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 
 #include "../include/WriteVTK.hpp"
 #include "../include/CMesh.hpp"

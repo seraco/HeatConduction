@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdexcept>
 #include <mpi.h>
 
 #include "../include/CCommandLine.hpp"

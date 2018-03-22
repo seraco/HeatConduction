@@ -85,14 +85,14 @@ namespace {
         unsigned size = 4;
         CMatrix mat(size, size, 0.0);
         CMatrix matTranspose(size, size, 0.0);
-        for (int j = 0; j < size; j++) {
-            for (int i = 0; i < size; i++) {
+        for (unsigned j = 0; j < size; j++) {
+            for (unsigned i = 0; i < size; i++) {
                 mat(i, j) = double(i - j);
             }
         }
         matTranspose = mat.transpose();
-        for (int j = 0; j < size; j++) {
-            for (int i = 0; i < size; i++) {
+        for (unsigned j = 0; j < size; j++) {
+            for (unsigned i = 0; i < size; i++) {
                 EXPECT_EQ(mat(i, j), matTranspose(j, i));
             }
         }

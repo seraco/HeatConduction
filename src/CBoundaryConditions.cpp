@@ -31,6 +31,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 #include "../include/CBoundaryConditions.hpp"
 #include "../include/CMesh.hpp"
@@ -211,7 +212,7 @@ CMatrix CBoundaryConditions::computeBCFlux(const CMesh& msh,
             fq = fq + (N.transpose() * detJ * thick * flux * gaussWeights(0, i));
         }
         fq = fq * (-1.0);
-        
+
         /*--- Assembly of global flux vector. ---*/
         f(node1, 0) = f(node1, 0) + fq(0, 0);
         f(node2, 0) = f(node2, 0) + fq(1, 0);
