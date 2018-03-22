@@ -17,3 +17,11 @@ the following geometry:
                      |________________________________|
                     bottom h = -0.5 * (a*x*x + b*x + h1)
 ```
+
+---------------------------------------------------
+  Heat++ Installation
+---------------------------------------------------
+
+To build Heat++ run `make` from the root directory of the source distribution.
+In order to be able to run Heat++ from the command line you should include the
+folder "/path/to/Heat++/bin" to your $PATH environment variable.

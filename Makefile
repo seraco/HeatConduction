@@ -1,5 +1,5 @@
-EXE = HeatConduction
-TEST_EXE = TestHeatConduction
+EXE = Heat++
+TEST_EXE = TestHeat++
 
 SRC_DIR = src
 TEST_SRC_DIR = test/src
