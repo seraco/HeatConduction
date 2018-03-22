@@ -11,7 +11,9 @@ install:
     - echo $HOME
     - echo $TRAVIS_BUILD_DIR
     - mkdir -p obj
+    - mkdir -p bin
     - mkdir -p test/obj
+    - mkdir -p test/bin
     - make test
 
 before_script:
