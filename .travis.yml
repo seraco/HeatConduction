@@ -1,7 +1,11 @@
-sudo: false
+sudo: required
 
 language:
     - cpp
+
+before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq build-essential libopenmpi-dev
 
 install:
     - echo $HOME
