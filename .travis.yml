@@ -18,6 +18,7 @@ install:
     - echo $HOME
     - echo $TRAVIS_BUILD_DIR
     - pwd
+    - cd $TRAVIS_BUILD_DIR
     - mkdir -p obj
     - mkdir -p bin
     - mkdir -p test/obj
