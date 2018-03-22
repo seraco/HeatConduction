@@ -55,6 +55,8 @@ Heat++.out -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 
 The solution is printed in the file `disp.vtk`. This file can then be plotted.
 
+Test
+
 ## License
 
 [MIT License](LICENSE)
