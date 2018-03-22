@@ -10,7 +10,7 @@ before_install:
 install:
     - echo $HOME
     - echo $TRAVIS_BUILD_DIR
-    - pwd
+    - mkdir -p test/obj
     - make test
 
 before_script:
