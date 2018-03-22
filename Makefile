@@ -25,7 +25,7 @@ RUN = mpirun -np 2
 CXXFLAGS += -std=c++11 -Wall -O2
 TEST_CXXFLAGS += -pthread
 INC = -Iinclude
-TEST_INC = -Itest/include
+TEST_INC = -Itest/include/
 
 default: compile
 
