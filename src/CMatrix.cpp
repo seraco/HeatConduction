@@ -87,6 +87,19 @@ unsigned CMatrix::getCols() const {
     return nCols;
 }
 
+CMatrixSymmetric CMatrix::toSymmetricStorage() {
+    CMatrixSymmetric res(nCols, nRows, 0.0);
+
+    /*--- Convert to symmetric storage using the access operator. ---*/
+    for (unsigned j = 0; j < nCols; j++) {
+        for (unsigned i = j; i < nRows; i++) {
+            res(j, i) = mtx[j*nRows+i];
+        }
+    }
+
+    return res;
+}
+
 CMatrix CMatrix::transpose() {
     CMatrix res(nCols, nRows, 0.0);
 

@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 #include "../../include/CMatrix.hpp"
+#include "../../include/CMatrixSymmetric.hpp"
 #include "../../include/CLinearSystem.hpp"
 
 namespace {
@@ -11,6 +12,7 @@ namespace {
                 unsigned size = 4;
                 A = new CMatrix(size, size, 0.0);
                 ACg = new CMatrix(size, size, 0.0);
+                ACgSym = new CMatrixSymmetric(size, size, 0.0);
                 AUpper = new CMatrix(size, size, 0.0);
                 ALower = new CMatrix(size, size, 0.0);
                 b = new CMatrix(size, 1, 0.0);
@@ -53,6 +55,23 @@ namespace {
                 (*ACg)(3, 2) = 1.0;
                 (*ACg)(3, 3) = 2.0;
 
+                (*ACgSym)(0, 0) = 2.0;
+                (*ACgSym)(0, 1) = 1.0;
+                (*ACgSym)(0, 2) = 0.0;
+                (*ACgSym)(0, 3) = 0.0;
+                (*ACgSym)(1, 0) = 1.0;
+                (*ACgSym)(1, 1) = 2.0;
+                (*ACgSym)(1, 2) = 1.0;
+                (*ACgSym)(1, 3) = 0.0;
+                (*ACgSym)(2, 0) = 0.0;
+                (*ACgSym)(2, 1) = 1.0;
+                (*ACgSym)(2, 2) = 2.0;
+                (*ACgSym)(2, 3) = 1.0;
+                (*ACgSym)(3, 0) = 0.0;
+                (*ACgSym)(3, 1) = 0.0;
+                (*ACgSym)(3, 2) = 1.0;
+                (*ACgSym)(3, 3) = 2.0;
+
                 (*b)(0, 0) = -3.;
                 (*b)(1, 0) = 5.0;
                 (*b)(2, 0) = 2.0;
@@ -83,6 +102,7 @@ namespace {
             virtual void TearDown() {
                 delete A;
                 delete ACg;
+                delete ACgSym;
                 delete AUpper;
                 delete ALower;
                 delete b;
@@ -95,6 +115,7 @@ namespace {
 
             CMatrix* A;
             CMatrix* ACg;
+            CMatrixSymmetric* ACgSym;
             CMatrix* AUpper;
             CMatrix* ALower;
             CMatrix* b;
@@ -156,6 +177,15 @@ namespace {
         unsigned size = (*b).getRows();
         CLinearSystem sys = CLinearSystem(*ACg, *bUpLow);
         CMatrix sol = sys.iterativeSolve();
+        for(unsigned i = 0; i < size; i++) {
+            EXPECT_NEAR((*xCg)(i, 0), sol(i, 0), 0.0001);
+        }
+    }
+
+    TEST_F(CLinearSystemTest, IterativeSymmetricSolve) {
+        unsigned size = (*b).getRows();
+        CLinearSystem sys = CLinearSystem(*ACg, *bUpLow);
+        CMatrix sol = sys.iterativeSymmetricSolve();
         for(unsigned i = 0; i < size; i++) {
             EXPECT_NEAR((*xCg)(i, 0), sol(i, 0), 0.0001);
         }

@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 #include "../../include/CMatrix.hpp"
+#include "../../include/CMatrixSymmetric.hpp"
 
 namespace {
     class CMatrixTest : public ::testing::Test {
@@ -87,7 +88,7 @@ namespace {
         CMatrix matTranspose(size, size, 0.0);
         for (unsigned j = 0; j < size; j++) {
             for (unsigned i = 0; i < size; i++) {
-                mat(i, j) = double(i - j);
+                mat(i, j) = double(int(i) - int(j));
             }
         }
         matTranspose = mat.transpose();

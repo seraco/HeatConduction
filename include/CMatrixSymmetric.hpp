@@ -1,7 +1,7 @@
 /*!
- * @file CMatrix.hpp
- * @brief Headers of the main subroutines for defining matrices and their operations.
- *        The implementation is in the <i>CMatrix.cpp</i> file.
+ * @file CMatrixSymmetric.hpp
+ * @brief Headers of the main subroutines for defining symmetric matrices and their operations.
+ *        The implementation is in the <i>CMatrixSymmetric.cpp</i> file.
  * @author S.Ramon (seraco)
  * @version 0.0.1
  *
@@ -26,10 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef __CMATRIX_HPP
-#define __CMATRIX_HPP
-
-#include "CMatrixSymmetric.hpp"
+#ifndef __CMATRIXSYMMETRIC_HPP
+#define __CMATRIXSYMMETRIC_HPP
 
 #define F77NAME(x) x##_
 extern "C" {
@@ -41,10 +39,10 @@ extern "C" {
 }
 
 /*!
- * @class CMatrix
- * @brief Class to define matrices and their operations.
+ * @class CMatrixSymmetric
+ * @brief Class to define symmetric matrices and their operations.
  */
-class CMatrix {
+class CMatrixSymmetric {
     private:
         unsigned nRows;     /*!< @brief Number of rows.*/
         unsigned nCols;     /*!< @brief Number of columns.*/
@@ -54,7 +52,7 @@ class CMatrix {
         /*!
          * @brief Constructor of the class.
          */
-        CMatrix();
+        CMatrixSymmetric();
 
         /*!
          * @brief Constructor of the class.
@@ -62,18 +60,18 @@ class CMatrix {
          * @param[in] cols - Number of columns.
          * @param[in] initValue - Initial value to populate matrix.
          */
-        CMatrix(unsigned rows, unsigned cols, const double initValue);
+        CMatrixSymmetric(unsigned rows, unsigned cols, const double initValue);
 
         /*!
          * @brief Copy constructor of the class.
          * @param[in] rhs - Matrix to copy.
          */
-        CMatrix(const CMatrix& rhs);
+        CMatrixSymmetric(const CMatrixSymmetric& rhs);
 
         /*!
          * @brief Destructor of the class.
          */
-        virtual ~CMatrix();
+        virtual ~CMatrixSymmetric();
 
         /*!
          * @brief Get number of rows.
@@ -93,44 +91,10 @@ class CMatrix {
         void printMtx();
 
         /*!
-         * @brief Covert to symmetric storage.
-         * @return Matrix with symmetric storage.
-         */
-        CMatrixSymmetric toSymmetricStorage();
-
-        /*!
-         * @brief Compute the transpose.
-         * @return Transpose of the matrix.
-         */
-        CMatrix transpose();
-
-        /*!
          * @brief Get the pointer at the beginning of the entries.
          * @return Pointer at the beginning of the entries.
          */
         double* getMtxAddress();
-
-        /*!
-         * @brief Construct a linear space between left and right.
-         * @param[in] left - Initial left node.
-         * @param[in] right - Final right node.
-         * @param[in] nNode - Number of nodes in the linspace.
-         * @return Linspace.
-         */
-        static CMatrix linspace(const double left, const double right,
-                                const unsigned nNode);
-
-        /*!
-         * @brief Compute the determinant of the matrix.
-         * @return Determinant.
-         */
-        double determinant();
-
-        /*!
-         * @brief Compute the inverse of the matrix.
-         * @return Inverse matrix.
-         */
-        CMatrix inverse();
 
         /*!
          * @brief Operator overloading of parenthesis to access entries.
@@ -153,56 +117,56 @@ class CMatrix {
          * @param[in] rhs - RHS matrix to copy.
          * @return Matrix with copied entries from rhs.
          */
-        CMatrix& operator=(const CMatrix& rhs);
+        CMatrixSymmetric& operator=(const CMatrixSymmetric& rhs);
 
         /*!
          * @brief Operator overloading of plus sign to sum matrices.
          * @param[in] rhs - RHS matrix to sum.
          * @return Matrix with summed entries.
          */
-        CMatrix operator+(const CMatrix& rhs);
+        CMatrixSymmetric operator+(const CMatrixSymmetric& rhs);
 
         /*!
          * @brief Operator overloading of plus-equal sign to sum matrices.
          * @param[in] rhs - RHS matrix to sum.
          * @return Matrix with summed entries.
          */
-        CMatrix& operator+=(const CMatrix& rhs);
+        CMatrixSymmetric& operator+=(const CMatrixSymmetric& rhs);
 
         /*!
          * @brief Operator overloading of minus sign to substract matrices.
          * @param[in] rhs - RHS matrix to substract.
          * @return Matrix with substracted entries.
          */
-        CMatrix operator-(const CMatrix& rhs);
+        // CMatrix operator-(const CMatrix& rhs);
 
         /*!
          * @brief Operator overloading of minus-equal sign to substract matrices.
          * @param[in] rhs - RHS matrix to substract.
          * @return Matrix with substracted entries.
          */
-        CMatrix& operator-=(const CMatrix& rhs);
+        // CMatrix& operator-=(const CMatrix& rhs);
 
         /*!
          * @brief Operator overloading of asterisk sign to multiply matrices.
          * @param[in] rhs - RHS matrix to multiply.
          * @return Product of the two matrices.
          */
-        CMatrix operator*(const CMatrix& rhs);
+        // CMatrix operator*(const CMatrix& rhs);
 
         /*!
          * @brief Operator overloading of asterisk-equal sign to multiply matrices.
          * @param[in] rhs - RHS matrix to multiply.
          * @return Product of the two matrices.
          */
-        CMatrix& operator*=(const CMatrix& rhs);
+        // CMatrix& operator*=(const CMatrix& rhs);
 
         /*!
          * @brief Operator overloading of plus sign to sum a constant to a matrix.
          * @param[in] rhs - RHS constant to sum.
          * @return Matrix with the constant summed.
          */
-        CMatrix operator+(const double& rhs);
+        // CMatrix operator+(const double& rhs);
 
         /*!
          * @brief Operator overloading of minus sign to substract a constant from
@@ -210,7 +174,7 @@ class CMatrix {
          * @param[in] rhs - RHS constant to substract.
          * @return Matrix with the constant substracted.
          */
-        CMatrix operator-(const double& rhs);
+        // CMatrix operator-(const double& rhs);
 
         /*!
          * @brief Operator overloading of asterisk sign to multiply a constant
@@ -218,7 +182,7 @@ class CMatrix {
          * @param[in] rhs - RHS constant to multiply.
          * @return Matrix with the constant multiplied.
          */
-        CMatrix operator*(const double& rhs);
+        // CMatrix operator*(const double& rhs);
 
         /*!
          * @brief Operator overloading of slash sign to divide a constant with
@@ -226,7 +190,7 @@ class CMatrix {
          * @param[in] rhs - RHS constant to divide.
          * @return Matrix with the constant divided.
          */
-        CMatrix operator/(const double& rhs);
+        // CMatrix operator/(const double& rhs);
 
         /*!
          * @brief Operator overloading of power sign to take the power of each
@@ -234,7 +198,7 @@ class CMatrix {
          * @param[in] rhs - RHS constant to take the power.
          * @return Matrix with each entry to the power of the constant.
          */
-        CMatrix operator^(const double& rhs);
+        // CMatrix operator^(const double& rhs);
 };
 
 #endif
