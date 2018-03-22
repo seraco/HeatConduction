@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "../include/gtest/gtest.h"
-#include "../../include/CBoundaryConditions.h"
+#include "../../include/CBoundaryConditions.hpp"
 
 namespace {
     class CBoundaryConditionsTest : public ::testing::Test {};

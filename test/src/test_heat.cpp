@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "../include/gtest/gtest.h"
-#include "../../include/CHeatConduction.h"
+#include "../../include/CHeatConduction.hpp"
 
 namespace {
     class CHeatConductionTest : public ::testing::Test {};

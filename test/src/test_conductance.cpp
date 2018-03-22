@@ -1,8 +1,8 @@
 #include <cmath>
 
 #include "../include/gtest/gtest.h"
-#include "../../include/CConductance.h"
-#include "../../include/CMatrix.h"
+#include "../../include/CConductance.hpp"
+#include "../../include/CMatrix.hpp"
 
 namespace {
     class CConductanceTest : public ::testing::Test {};

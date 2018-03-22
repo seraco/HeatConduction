@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "../include/gtest/gtest.h"
-#include "../../include/CMatrix.h"
-#include "../../include/CLinearSystem.h"
+#include "../../include/CMatrix.hpp"
+#include "../../include/CLinearSystem.hpp"
 
 namespace {
     class CLinearSystemTest : public ::testing::Test {

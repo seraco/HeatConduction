@@ -1,5 +1,5 @@
 #include "../include/gtest/gtest.h"
-#include "../../include/CGeometry.h"
+#include "../../include/CGeometry.hpp"
 
 namespace {
     class CGeometryTest : public ::testing::Test {};

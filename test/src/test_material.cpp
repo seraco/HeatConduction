@@ -1,6 +1,6 @@
 #include "../include/gtest/gtest.h"
-#include "../../include/CMatrix.h"
-#include "../../include/CMaterial.h"
+#include "../../include/CMatrix.hpp"
+#include "../../include/CMaterial.hpp"
 
 namespace {
     class CMaterialTest : public ::testing::Test {};

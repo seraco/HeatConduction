@@ -1,0 +1,14 @@
+sudo: false
+
+language:
+    - cpp
+
+install:
+    - echo $TRAVIS_BUILD_DIR
+    - make test
+
+before_script:
+    - cd test/bin
+
+script:
+    - TestHeat++.out

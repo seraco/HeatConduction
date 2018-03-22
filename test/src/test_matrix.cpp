@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "../include/gtest/gtest.h"
-#include "../../include/CMatrix.h"
+#include "../../include/CMatrix.hpp"
 
 namespace {
     class CMatrixTest : public ::testing::Test {

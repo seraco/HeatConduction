@@ -1,7 +1,7 @@
 #include "../include/gtest/gtest.h"
-#include "../../include/CMatrix.h"
-#include "../../include/CGeometry.h"
-#include "../../include/CMesh.h"
+#include "../../include/CMatrix.hpp"
+#include "../../include/CGeometry.hpp"
+#include "../../include/CMesh.hpp"
 
 namespace {
     class CMeshTest : public ::testing::Test {};
