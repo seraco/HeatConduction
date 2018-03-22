@@ -25,8 +25,8 @@
  * SOFTWARE.
  */
 
-#ifndef __CWRITEVTK_CPP
-#define __CWRITEVTK_CPP
+#ifndef __WRITEVTK_CPP
+#define __WRITEVTK_CPP
 
 #include <string>
 #include <fstream>

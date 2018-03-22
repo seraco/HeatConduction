@@ -1,7 +1,7 @@
 /*!
- * @file WriteVTK.hpp
- * @brief Headers of the main subroutines for writing VTK files.
- *        The implementation is in the <i>WriteVTK.cpp</i> file.
+ * @file Analytical.hpp
+ * @brief Headers of the main subroutines for calculating analytical solution and error.
+ *        The implementation is in the <i>Analytical.cpp</i> file.
  * @author S.Ramon (seraco)
  * @version 0.0.1
  *
@@ -26,21 +26,35 @@
  * SOFTWARE.
  */
 
-#ifndef __WRITEVTK_HPP
-#define __WRITEVTK_HPP
+ #ifndef __ANALYTICAL_HPP
+ #define __ANALYTICAL_HPP
 
-#include <string>
+ #include <string>
 
-#include "CMatrix.hpp"
-#include "CMesh.hpp"
-#include "CHeatConduction.hpp"
+ #include "CMatrix.hpp"
+ #include "CMesh.hpp"
+ #include "CBoundaryConditions.hpp"
+ #include "CMaterial.hpp"
 
 /*!
- * @brief Subroutine that writes VTK files.
- * @param[in] fname - Filename.
+ * @brief Solve the heat problem with the analytical solution.
  * @param[in] msh - Mesh.
- * @param[in] heat - Heat conduction with results.
+ * @param[in] bnd - Boundary conditions.
+ * @param[in] mat - Material.
+ * @param[in] numSol - Numerical solution.
  */
-void writeVTK(std::string fname, const CMesh& msh, const CHeatConduction& heat);
+void solveAnalytical(const CMesh& msh,
+                     const CBoundaryConditions& bnd,
+                     const CMaterial& mat,
+                     const CMatrix& numSol);
+
+/*!
+ * @brief Calculates the error of numerical with analytical solution.
+ * @param[in] sol1 - First solution.
+ * @param[in] sol2 - Second solution.
+ * @param[in] size - Size of the solutions.
+ */
+void calculateError(const CMatrix& sol1, const CMatrix& sol2,
+                    const unsigned size);
 
 #endif
