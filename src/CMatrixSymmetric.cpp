@@ -51,10 +51,8 @@ CMatrixSymmetric::CMatrixSymmetric(unsigned rows, unsigned cols, const double in
     mtx = new double[cols*rows];
 
     /*--- Initialize entries with initValue. ---*/
-    // std::cout << "Rows: " << nRows << std::endl;
     for (unsigned j = 0; j < nCols; j++) {
         for (unsigned i = j; i < nRows; i++) {
-            // std::cout << "j:" << j << " i:" << i << " " << j*nRows-(j-1)*j/2+i-j << std::endl;
             mtx[j*nRows-(j-1)*j/2+i-j] = initValue;
         }
     }
@@ -159,114 +157,5 @@ CMatrixSymmetric& CMatrixSymmetric::operator+=(const CMatrixSymmetric& rhs) {
     (*this) = res;
     return *this;
 }
-
-// CMatrix CMatrixSymmetric::operator-(const CMatrix& rhs) {
-//     CMatrix res(nRows, nCols, 0.0);
-//
-//     /*--- Substract every entry. ---*/
-//     for (unsigned j = 0; j < nCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             res(i, j) = mtx[j*nRows+i] - rhs(i, j);
-//         }
-//     }
-//
-//     return res;
-// }
-
-// CMatrix& CMatrixSymmetric::operator-=(const CMatrix& rhs) {
-//     /*--- Use the - overloaded sign to compute -=. ---*/
-//     CMatrix res = (*this) - rhs;
-//     (*this) = res;
-//     return *this;
-// }
-
-// CMatrix CMatrixSymmetric::operator*(const CMatrix& rhs) {
-//     unsigned rhsCols = rhs.getCols();
-//     CMatrix res(nRows, rhsCols, 0.0);
-//
-//     /*--- Compute the product of matrices. ---*/
-//     for (unsigned j = 0; j < rhsCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             for (unsigned k = 0; k < nCols; k++) {
-//                 res(i, j) += mtx[k*nRows+i] * rhs(k, j);
-//             }
-//         }
-//     }
-//
-//     return res;
-// }
-
-// CMatrix& CMatrixSymmetric::operator*=(const CMatrix& rhs) {
-//     /*--- Use the * overloaded sign to compute *=. ---*/
-//     CMatrix res = (*this) * rhs;
-//     (*this) = res;
-//     return *this;
-// }
-
-// CMatrix CMatrixSymmetric::operator+(const double& rhs) {
-//     CMatrix res(nRows, nCols, 0.0);
-//
-//     /*--- Sum every entry with the constant. ---*/
-//     for (unsigned j = 0; j < nCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             res(i, j) = mtx[j*nRows+i] + rhs;
-//         }
-//     }
-//
-//     return res;
-// }
-
-
-// CMatrix CMatrixSymmetric::operator-(const double& rhs) {
-//     CMatrix res(nRows, nCols, 0.0);
-//
-//     /*--- Substract every entry with the constant. ---*/
-//     for (unsigned j = 0; j < nCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             res(i, j) = mtx[j*nRows+i] - rhs;
-//         }
-//     }
-//
-//     return res;
-// }
-
-// CMatrix CMatrixSymmetric::operator*(const double& rhs) {
-//     CMatrix res(nRows, nCols, 0.0);
-//
-//     /*--- Multiply every entry with the constant. ---*/
-//     for (unsigned j = 0; j < nCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             res(i, j) = mtx[j*nRows+i] * rhs;
-//         }
-//     }
-//
-//     return res;
-// }
-
-// CMatrix CMatrixSymmetric::operator/(const double& rhs) {
-//     CMatrix res(nRows, nCols, 0.0);
-//
-//     /*--- Divide every entry with the constant. ---*/
-//     for (unsigned j = 0; j < nCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             res(i, j) = mtx[j*nRows+i] / rhs;
-//         }
-//     }
-//
-//     return res;
-// }
-
-// CMatrix CMatrixSymmetric::operator^(const double& rhs) {
-//     CMatrix res(nRows, nCols, 0.0);
-//
-//     /*--- Take the power of every entry with the constant. ---*/
-//     for (unsigned j = 0; j < nCols; j++) {
-//         for (unsigned i = 0; i < nRows; i++) {
-//             res(i, j) = pow(mtx[j*nRows+i], rhs);
-//         }
-//     }
-//
-//     return res;
-// }
 
 #endif

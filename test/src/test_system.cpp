@@ -129,7 +129,7 @@ namespace {
     TEST_F(CLinearSystemTest, CopyConstructor) {
         CMatrix lhs = *A;
         CMatrix rhs = *b;
-        CLinearSystem sys = CLinearSystem(lhs, rhs);
+        CLinearSystem<CMatrix> sys = CLinearSystem<CMatrix>(lhs, rhs);
         CMatrix lhsInSystem = CMatrix(sys.getLhsMatrix());
         CMatrix rhsInSystem = CMatrix(sys.getRhsVector());
         EXPECT_EQ((*A).getRows(), lhsInSystem.getRows());
@@ -148,7 +148,7 @@ namespace {
 
     TEST_F(CLinearSystemTest, UpperSolve) {
         unsigned size = (*bUpLow).getRows();
-        CLinearSystem sys = CLinearSystem(*AUpper, *bUpLow);
+        CLinearSystem<CMatrix> sys = CLinearSystem<CMatrix>(*AUpper, *bUpLow);
         CMatrix sol = sys.directSolve();
         for(unsigned i = 0; i < size; i++) {
             EXPECT_NEAR((*xUpper)(i, 0), sol(i, 0), 0.0001);
@@ -157,7 +157,7 @@ namespace {
 
     TEST_F(CLinearSystemTest, LowerSolve) {
         unsigned size = (*bUpLow).getRows();
-        CLinearSystem sys = CLinearSystem(*ALower, *bUpLow);
+        CLinearSystem<CMatrix> sys = CLinearSystem<CMatrix>(*ALower, *bUpLow);
         CMatrix sol = sys.directSolve();
         for(unsigned i = 0; i < size; i++) {
             EXPECT_NEAR((*xLower)(i, 0), sol(i, 0), 0.0001);
@@ -166,7 +166,7 @@ namespace {
 
     TEST_F(CLinearSystemTest, DirectSolve) {
         unsigned size = (*b).getRows();
-        CLinearSystem sys = CLinearSystem(*A, *b);
+        CLinearSystem<CMatrix> sys = CLinearSystem<CMatrix>(*A, *b);
         CMatrix sol = sys.directSolve();
         for(unsigned i = 0; i < size; i++) {
             EXPECT_NEAR((*x)(i, 0), sol(i, 0), 0.0001);
@@ -175,7 +175,7 @@ namespace {
 
     TEST_F(CLinearSystemTest, IterativeSolve) {
         unsigned size = (*b).getRows();
-        CLinearSystem sys = CLinearSystem(*ACg, *bUpLow);
+        CLinearSystem<CMatrix> sys = CLinearSystem<CMatrix>(*ACg, *bUpLow);
         CMatrix sol = sys.iterativeSolve();
         for(unsigned i = 0; i < size; i++) {
             EXPECT_NEAR((*xCg)(i, 0), sol(i, 0), 0.0001);
@@ -184,8 +184,9 @@ namespace {
 
     TEST_F(CLinearSystemTest, IterativeSymmetricSolve) {
         unsigned size = (*b).getRows();
-        CLinearSystem sys = CLinearSystem(*ACg, *bUpLow);
-        CMatrix sol = sys.iterativeSymmetricSolve();
+        CLinearSystem<CMatrixSymmetric> sys =
+            CLinearSystem<CMatrixSymmetric>(*ACgSym, *bUpLow);
+        CMatrix sol = sys.iterativeSolve();
         for(unsigned i = 0; i < size; i++) {
             EXPECT_NEAR((*xCg)(i, 0), sol(i, 0), 0.0001);
         }
