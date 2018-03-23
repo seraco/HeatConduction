@@ -57,6 +57,13 @@ extern "C" {
                          const double* x, const int& incx,
                          const double& beta,
                          double* y, const int& incy);
+    void F77NAME(dspmv) (const char& trans,
+                         const int& nrowsa,
+                         const double& alpha,
+                         const double* A,
+                         const double* x, const int& incx,
+                         const double& beta,
+                         double* y, const int& incy);
     void F77NAME(daxpy) (const int& n,
                          const double& alpha,
                          const double* x, const int& incx,

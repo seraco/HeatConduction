@@ -145,7 +145,7 @@ CMatrix CLinearSystem::iterativeSolve() {
 
 CMatrix CLinearSystem::iterativeSymmetricSolve() {
     /*--- Initialize variables to be used in the subroutine. ---*/
-    const unsigned n = lhsMatrix.getRows();
+    const unsigned n = lhsSymMatrix.getRows();
     double* r = new double[n];
     double* p = new double[n];
     double* t = new double[n];
@@ -154,7 +154,7 @@ CMatrix CLinearSystem::iterativeSymmetricSolve() {
     double beta;
     double eps;
     double tol = 0.00001;
-    CMatrix A = lhsMatrix;
+    CMatrixSymmetric A = lhsSymMatrix;
     CMatrix b = rhsVector;
     CMatrix x = rhsVector;
     double* APtr = A.getMtxAddress();
@@ -163,11 +163,11 @@ CMatrix CLinearSystem::iterativeSymmetricSolve() {
 
     /*--- CG method algorithm. ---*/
     F77NAME(dcopy)(n, bPtr, 1, r, 1);
-    F77NAME(dsymv)('L', n, -1.0, APtr, n, xPtr, 1, 1.0, r, 1);
+    F77NAME(dspmv)('L', n, -1.0, APtr, xPtr, 1, 1.0, r, 1);
     F77NAME(dcopy)(n, r, 1, p, 1);
     k = 0;
     do {
-        F77NAME(dsymv)('L', n, 1.0, APtr, n, p, 1, 0.0, t, 1);
+        F77NAME(dspmv)('L', n, 1.0, APtr, p, 1, 0.0, t, 1);
         alpha = parallelDot(t, p, n);
         alpha = parallelDot(r, r, n) / alpha;
         beta = parallelDot(r, r, n);
