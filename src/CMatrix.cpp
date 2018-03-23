@@ -175,7 +175,7 @@ CMatrix CMatrix::inverse() {
     return A;
 }
 
-double* CMatrix::getMtxAddress() {
+double* CMatrix::getMtxAddress() const {
     return &mtx[0];
 }
 

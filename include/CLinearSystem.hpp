@@ -77,10 +77,9 @@ extern "C" {
  * @class CLinearSystem
  * @brief Class to solve linear systems of equations.
  */
-class CLinearSystem {
+template <typename T> class CLinearSystem {
     private:
-        CMatrix lhsMatrix;              /*!< @brief A matrix of the system.*/
-        CMatrixSymmetric lhsSymMatrix;  /*!< @brief A symmetric matrix of the system.*/
+        T lhsMatrix;              /*!< @brief A matrix of the system.*/
         CMatrix rhsVector;              /*!< @brief b vector of the system.*/
 
         /*!
@@ -95,7 +94,13 @@ class CLinearSystem {
          * @param[in] y - Second vector.
          * @param[in] n - Size of the vectors.
          */
-        static double parallelDot(double* x, double* y, unsigned n);
+        double parallelDot(double* x, double* y, unsigned n);
+
+        void parallelMul(const CMatrix& A, double* x, double* y,
+                         unsigned n, double alpha, double beta);
+
+        void parallelMul(const CMatrixSymmetric& A, double* x,
+                         double* y, unsigned n, double alpha, double beta);
 
     public:
         /*!
@@ -103,14 +108,7 @@ class CLinearSystem {
          * @param[in] A - LHS matrix of coefficients.
          * @param[in] b - RHS vector.
          */
-        CLinearSystem(const CMatrix& A, const CMatrix& b);
-
-        /*!
-         * @brief Constructor of the class.
-         * @param[in] A - Symmetric LHS matrix of coefficients.
-         * @param[in] b - RHS vector.
-         */
-        CLinearSystem(const CMatrixSymmetric& A, const CMatrix& b);
+        CLinearSystem(const T& A, const CMatrix& b);
 
         /*!
          * @brief Destructor of the class.
@@ -121,7 +119,7 @@ class CLinearSystem {
          * @brief Get LHS matrix of coefficients.
          * @return LHS matrix of coefficients.
          */
-        CMatrix getLhsMatrix();
+        T getLhsMatrix();
 
         /*!
          * @brief Get RHS vector.
@@ -140,12 +138,8 @@ class CLinearSystem {
          * @return Vector of unknowns.
          */
         CMatrix iterativeSolve();
-
-        /*!
-         * @brief Iterative solution of the system with CG method for A symmetric.
-         * @return Vector of unknowns.
-         */
-        CMatrix iterativeSymmetricSolve();
 };
+
+#include "../src/CLinearSystem.cpp"
 
 #endif

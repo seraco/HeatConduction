@@ -35,9 +35,10 @@
 #include "../include/CMatrix.hpp"
 #include "../include/CLinearSystem.hpp"
 
-CLinearSystem::CLinearSystem(const CMatrix& A, const CMatrix& b) {
+template<typename T>
+CLinearSystem<T>::CLinearSystem(const T& A, const CMatrix& b) {
     /*--- Initialize properties. ---*/
-    lhsMatrix = CMatrix(A);
+    lhsMatrix = T(A);
     rhsVector = CMatrix(b);
 
     /*--- Check if the system is valid. ---*/
@@ -45,32 +46,31 @@ CLinearSystem::CLinearSystem(const CMatrix& A, const CMatrix& b) {
         throw std::runtime_error("LHS matrix and RHS vector incompatible");
 }
 
-CLinearSystem::CLinearSystem(const CMatrixSymmetric& A, const CMatrix& b) {
-    /*--- Initialize properties. ---*/
-    lhsSymMatrix = CMatrixSymmetric(A);
-    rhsVector = CMatrix(b);
-}
+template<typename T>
+CLinearSystem<T>::~CLinearSystem() {}
 
-CLinearSystem::~CLinearSystem() {}
-
-CMatrix CLinearSystem::getLhsMatrix() {
+template<typename T>
+T CLinearSystem<T>::getLhsMatrix() {
     CMatrix res = CMatrix(lhsMatrix);
     return res;
 }
 
-CMatrix CLinearSystem::getRhsVector() {
+template<typename T>
+CMatrix CLinearSystem<T>::getRhsVector() {
     CMatrix res = rhsVector;
     return res;
 }
 
-bool CLinearSystem::isSystemValid() {
+template<typename T>
+bool CLinearSystem<T>::isSystemValid() {
     bool isSquareMatrix = lhsMatrix.getRows() == lhsMatrix.getCols();
     bool isCompleteVector = lhsMatrix.getRows() == rhsVector.getRows();
     if(!isSquareMatrix || !isCompleteVector) return false;
     return true;
 }
 
-CMatrix CLinearSystem::directSolve() {
+template<typename T>
+CMatrix CLinearSystem<T>::directSolve() {
     /*--- Initialize variables to be used in the subroutine. ---*/
     const unsigned size = lhsMatrix.getRows();
     const unsigned nRhs = 1;
@@ -90,7 +90,8 @@ CMatrix CLinearSystem::directSolve() {
     return b;
 }
 
-CMatrix CLinearSystem::iterativeSolve() {
+template<typename T>
+CMatrix CLinearSystem<T>::iterativeSolve() {
     /*--- Initialize variables to be used in the subroutine. ---*/
     const unsigned n = lhsMatrix.getRows();
     double* r = new double[n];
@@ -101,20 +102,22 @@ CMatrix CLinearSystem::iterativeSolve() {
     double beta;
     double eps;
     double tol = 0.00001;
-    CMatrix A = lhsMatrix;
+    T A = lhsMatrix;
     CMatrix b = rhsVector;
     CMatrix x = rhsVector;
-    double* APtr = A.getMtxAddress();
+    // double* APtr = A.getMtxAddress();
     double* bPtr = b.getMtxAddress();
     double* xPtr = x.getMtxAddress();
 
     /*--- CG method algorithm. ---*/
     F77NAME(dcopy)(n, bPtr, 1, r, 1);
-    F77NAME(dgemv)('N', n, n, -1.0, APtr, n, xPtr, 1, 1.0, r, 1);
+    // F77NAME(dgemv)('N', n, n, -1.0, APtr, n, xPtr, 1, 1.0, r, 1);
+    parallelMul(A, xPtr, r, n, -1.0, 1.0);
     F77NAME(dcopy)(n, r, 1, p, 1);
     k = 0;
     do {
-        F77NAME(dgemv)('N', n, n, 1.0, APtr, n, p, 1, 0.0, t, 1);
+        // F77NAME(dgemv)('N', n, n, 1.0, APtr, n, p, 1, 0.0, t, 1);
+        parallelMul(A, p, t, n, 1.0, 0.0);
         alpha = parallelDot(t, p, n);
         alpha = parallelDot(r, r, n) / alpha;
         beta = parallelDot(r, r, n);
@@ -143,60 +146,62 @@ CMatrix CLinearSystem::iterativeSolve() {
     return x;
 }
 
-CMatrix CLinearSystem::iterativeSymmetricSolve() {
-    /*--- Initialize variables to be used in the subroutine. ---*/
-    const unsigned n = lhsSymMatrix.getRows();
-    double* r = new double[n];
-    double* p = new double[n];
-    double* t = new double[n];
-    int k;
-    double alpha;
-    double beta;
-    double eps;
-    double tol = 0.00001;
-    CMatrixSymmetric A = lhsSymMatrix;
-    CMatrix b = rhsVector;
-    CMatrix x = rhsVector;
-    double* APtr = A.getMtxAddress();
-    double* bPtr = b.getMtxAddress();
-    double* xPtr = x.getMtxAddress();
+// template<T>
+// CMatrix CLinearSystem<T>::iterativeSolve() {
+//     /*--- Initialize variables to be used in the subroutine. ---*/
+//     const unsigned n = lhsMatrix.getRows();
+//     double* r = new double[n];
+//     double* p = new double[n];
+//     double* t = new double[n];
+//     int k;
+//     double alpha;
+//     double beta;
+//     double eps;
+//     double tol = 0.00001;
+//     CMatrixSymmetric A = lhsMatrix;
+//     CMatrix b = rhsVector;
+//     CMatrix x = rhsVector;
+//     double* APtr = A.getMtxAddress();
+//     double* bPtr = b.getMtxAddress();
+//     double* xPtr = x.getMtxAddress();
+//
+//     /*--- CG method algorithm. ---*/
+//     F77NAME(dcopy)(n, bPtr, 1, r, 1);
+//     F77NAME(dspmv)('L', n, -1.0, APtr, xPtr, 1, 1.0, r, 1);
+//     F77NAME(dcopy)(n, r, 1, p, 1);
+//     k = 0;
+//     do {
+//         F77NAME(dspmv)('L', n, 1.0, APtr, p, 1, 0.0, t, 1);
+//         alpha = parallelDot(t, p, n);
+//         alpha = parallelDot(r, r, n) / alpha;
+//         beta = parallelDot(r, r, n);
+//
+//         F77NAME(daxpy)(n, alpha, p, 1, xPtr, 1);
+//         F77NAME(daxpy)(n, -alpha, t, 1, r, 1);
+//
+//         eps = F77NAME(dnrm2)(n, r, 1);
+//         if (eps < tol*tol) {
+//             break;
+//         }
+//         beta = parallelDot(r, r, n) / beta;
+//
+//         F77NAME(dcopy)(n, r, 1, t, 1);
+//         F77NAME(daxpy)(n, beta, p, 1, t, 1);
+//         F77NAME(dcopy)(n, t, 1, p, 1);
+//
+//         k++;
+//     } while (k < 5000);
+//
+//     /*--- Release allocated memory. ---*/
+//     delete[] r;
+//     delete[] p;
+//     delete[] t;
+//
+//     return x;
+// }
 
-    /*--- CG method algorithm. ---*/
-    F77NAME(dcopy)(n, bPtr, 1, r, 1);
-    F77NAME(dspmv)('L', n, -1.0, APtr, xPtr, 1, 1.0, r, 1);
-    F77NAME(dcopy)(n, r, 1, p, 1);
-    k = 0;
-    do {
-        F77NAME(dspmv)('L', n, 1.0, APtr, p, 1, 0.0, t, 1);
-        alpha = parallelDot(t, p, n);
-        alpha = parallelDot(r, r, n) / alpha;
-        beta = parallelDot(r, r, n);
-
-        F77NAME(daxpy)(n, alpha, p, 1, xPtr, 1);
-        F77NAME(daxpy)(n, -alpha, t, 1, r, 1);
-
-        eps = F77NAME(dnrm2)(n, r, 1);
-        if (eps < tol*tol) {
-            break;
-        }
-        beta = parallelDot(r, r, n) / beta;
-
-        F77NAME(dcopy)(n, r, 1, t, 1);
-        F77NAME(daxpy)(n, beta, p, 1, t, 1);
-        F77NAME(dcopy)(n, t, 1, p, 1);
-
-        k++;
-    } while (k < 5000);
-
-    /*--- Release allocated memory. ---*/
-    delete[] r;
-    delete[] p;
-    delete[] t;
-
-    return x;
-}
-
-double CLinearSystem::parallelDot(double* x, double* y, unsigned n) {
+template<typename T>
+double CLinearSystem<T>::parallelDot(double* x, double* y, unsigned n) {
     /*--- Initialize variables to be used in the subroutine. ---*/
     double dot = 0.0, res = 0.0;
     unsigned size;
@@ -224,10 +229,19 @@ double CLinearSystem::parallelDot(double* x, double* y, unsigned n) {
     return res;
 }
 
-// void CLinearSystem::parallelMul(double* A, double* x, double* y, unsigned n) {
-//     for (unsigned i = 0; i < n; i++) {
-//         y[i] = parallelDot(A[i*n], x, n);
-//     }
-// }
+template<typename T>
+void CLinearSystem<T>::parallelMul(const CMatrix& A, double* x, double* y,
+                                   unsigned n, double alpha, double beta) {
+    double* APtr = A.getMtxAddress();
+    F77NAME(dgemv)('N', n, n, alpha, APtr, n, x, 1, beta, y, 1);
+}
+
+template<typename T>
+void CLinearSystem<T>::parallelMul(const CMatrixSymmetric& A, double* x,
+                                   double* y,
+                                   unsigned n, double alpha, double beta) {
+    double* APtr = A.getMtxAddress();
+    F77NAME(dspmv)('L', n, alpha, APtr, x, 1, beta, y, 1);
+}
 
 #endif

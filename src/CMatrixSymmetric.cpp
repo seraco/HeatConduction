@@ -89,7 +89,7 @@ unsigned CMatrixSymmetric::getCols() const {
     return nCols;
 }
 
-double* CMatrixSymmetric::getMtxAddress() {
+double* CMatrixSymmetric::getMtxAddress() const {
     return &mtx[0];
 }
 
