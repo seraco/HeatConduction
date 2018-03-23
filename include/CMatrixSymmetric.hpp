@@ -94,7 +94,7 @@ class CMatrixSymmetric {
          * @brief Get the pointer at the beginning of the entries.
          * @return Pointer at the beginning of the entries.
          */
-        double* getMtxAddress();
+        double* getMtxAddress() const;
 
         /*!
          * @brief Operator overloading of parenthesis to access entries.

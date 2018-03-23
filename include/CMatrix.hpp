@@ -108,7 +108,7 @@ class CMatrix {
          * @brief Get the pointer at the beginning of the entries.
          * @return Pointer at the beginning of the entries.
          */
-        double* getMtxAddress();
+        double* getMtxAddress() const;
 
         /*!
          * @brief Construct a linear space between left and right.

@@ -140,7 +140,9 @@ CMatrix CHeatConduction::solveTemperature(const CMesh& msh,
 
     /*--- Solve the linear system of equations. ---*/
     CMatrix RHS = Ff - Kef.transpose() * Te;
-    CLinearSystem sys = CLinearSystem(Kff, RHS);
+    CMatrixSymmetric KffSym = Kff.toSymmetricStorage();
+    CLinearSystem<CMatrixSymmetric> sys =
+        CLinearSystem<CMatrixSymmetric>(KffSym, RHS);
     Tf = sys.iterativeSolve();
 
     /*--- Build global temperature vector combining Te and Tf. ---*/

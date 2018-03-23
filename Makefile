@@ -56,13 +56,13 @@ $(TEST_OBJ_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(TEST_CXXFLAGS) $(INC) -c $< -o $@
 
 debug: CXXFLAGS += -DDEBUG -g
-debug: $(TEST_EXE)
+debug: $(EXE)
 
 .PHONY: c1
 c1:
 	$(BIN) -A 0.0 --left-height 1.0 --right-height 1.0 -L 2.0 -T 0.2 \
 		   --k-xx 250.0 --k-xy 0.0 --k-yy 250.0 \
-		   --n-x 10 --n-y 5 \
+		   --n-x 60 --n-y 40 \
 		   --flux-location right --flux-value 2500.0 \
 		   --temp-location left --temp-value 10.0
 

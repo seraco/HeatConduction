@@ -31,6 +31,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <mpi.h>
 
 #include "../include/Analytical.hpp"
 #include "../include/CMesh.hpp"
@@ -53,6 +54,9 @@ void solveAnalytical(const CMesh& msh,
     double kXX = mat.getKXX();
     double kYY = mat.getKYY();
 
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
     /*--- Calculate analytical solution. ---*/
     if (flLoc == "right" && tpLoc == "left") {
         for (unsigned i = 0; i < nNod; i++) {
@@ -65,7 +69,7 @@ void solveAnalytical(const CMesh& msh,
         }
         calculateError(T, numSol, nNod);
     } else {
-        std::cout << "Unknown analytical solution" << std::endl;
+        if (rank == 0) std::cout << "Unknown analytical solution" << std::endl;
     }
 }
 
@@ -74,11 +78,15 @@ void calculateError(const CMatrix& sol1, const CMatrix& sol2,
     /*--- Initialize variables to be used in the subroutine. ---*/
     double err = 0.0;
 
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
     /*--- Compute error. ---*/
     for (unsigned i = 0; i < size; i++) {
         err += abs(sol1(i, 0) - sol2(i, 0));
     }
-    std::cout << "The error of the solution is: " << err << std::endl;
+    if (rank == 0)
+        std::cout << "The error of the solution is: " << err << std::endl;
 }
 
 #endif
